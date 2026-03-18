@@ -34,9 +34,15 @@ friends.forEach(friend => {
   list.appendChild(item);
 });
 
-// MUSIC TOGGLE
 const music = document.getElementById("bgMusic");
 const toggleBtn = document.getElementById("toggleMusic");
+
+function enableAudio() {
+  music.muted = false;
+  music.play();
+  document.removeEventListener("click", enableAudio);
+}
+document.addEventListener("click", enableAudio);
 
 toggleBtn.addEventListener("click", () => {
   if (music.paused) {
@@ -44,6 +50,6 @@ toggleBtn.addEventListener("click", () => {
     toggleBtn.textContent = "🔇 Pause";
   } else {
     music.pause();
-    toggleBtn.textContent = "🎵 Music";
+    toggleBtn.textContent = "🎵 Play Music";
   }
 });
