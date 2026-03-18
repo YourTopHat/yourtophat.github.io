@@ -7,16 +7,16 @@
   <title>Hat — Cozy Profile</title>
 
   <!-- Google Fonts -->
-  https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700&display=swap
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700&display=swap" rel="stylesheet" />
 
   <!-- Styles -->
-  css/style.css
+  <link rel="stylesheet" href="css/style.css" />
 
-  <meta name="description" content="A cozy kawaii personal profile by Hat"/>
+  <meta name="description" content="A cozy kawaii personal profile by Hat" />
 </head>
 <body>
 
-  <!-- Sparkles (CSS only, no images!) -->
+  <!-- Sparkles -->
   <div class="sparkle-layer"></div>
 
   <main class="page fade-in">
@@ -24,7 +24,7 @@
     <!-- HERO -->
     <header class="hero">
       <div class="avatar">
-        assets/hat.png
+        <img src="assets/hat.png" alt="Avatar">
       </div>
 
       <div class="title-block">
@@ -33,7 +33,7 @@
 
         <div class="controls">
           <button id="toggleMusic" class="btn small">🎵 Music</button>
-          https://github.com/YourTopHatMy GitHub</a>
+          <a class="btn small" href="https://github.com/YourTopHat" target="_blank">My GitHub</a>
         </div>
       </div>
     </header>
@@ -98,8 +98,9 @@
   </main>
 
   <!-- BACKGROUND MUSIC (kept) -->
-  assets/music.mp3</audio>
+  <audio id="bgMusic" src="assets/music.mp3" loop muted></audio>
 
-  js/main.js</script>
+  <!-- JS -->
+  <script src="js/main.js"></script>
 </body>
 </html>

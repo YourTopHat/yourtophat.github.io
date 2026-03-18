@@ -1,4 +1,3 @@
-// FRIENDS DATA
 const friends = [
   {
     name: "Luna",
@@ -16,36 +15,39 @@ const friends = [
 
 const list = document.getElementById("friendsList");
 
-// CREATE CARDS
-friends.forEach(f => {
+friends.forEach(friend => {
   const item = document.createElement("div");
   item.className = "accordion-item";
+
   item.innerHTML = `
-    <div class="accordion-header">${f.name}</div>
-    <div class="accordion-content">${f.message}</div>
+    <div class="accordion-header">${friend.name}</div>
+    <div class="accordion-content">${friend.message}</div>
   `;
-  item.onclick = () => item.classList.toggle("open");
+
+  item.addEventListener("click", () => {
+    item.classList.toggle("open");
+  });
+
   list.appendChild(item);
 });
 
 // MUSIC
 const music = document.getElementById("bgMusic");
-const btn = document.getElementById("toggleMusic");
+const toggleBtn = document.getElementById("toggleMusic");
 
-// Start music on first click anywhere
-document.addEventListener("click", function init() {
+// Enable audio after first user click (browser rules)
+document.addEventListener("click", function startAudio() {
   music.muted = false;
   music.play();
-  document.removeEventListener("click", init);
-}, { once: true });
+  document.removeEventListener("click", startAudio);
+});
 
-// Toggle button
-btn.onclick = () => {
+toggleBtn.addEventListener("click", () => {
   if (music.paused) {
     music.play();
-    btn.textContent = "🔇 Pause";
+    toggleBtn.textContent = "🔇 Pause";
   } else {
     music.pause();
-    btn.textContent = "🎵 Play Music";
+    toggleBtn.textContent = "🎵 Play Music";
   }
-};
+});

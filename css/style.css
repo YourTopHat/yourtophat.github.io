@@ -2,13 +2,12 @@
   --bg1: #fdf6ff;
   --bg2: #f6efff;
   --card: #ffffff;
-
   --accent: #b487ff;
   --accent-soft: #d7c3ff;
   --text-muted: #7c6b8d;
 
   --radius: 20px;
-  --shadow: 0 10px 30px rgba(150, 120, 255, 0.15);
+  --shadow: 0 10px 35px rgba(150, 120, 255, 0.15);
 
   font-family: "Nunito", sans-serif;
 }
@@ -29,18 +28,19 @@ body {
   box-shadow: var(--shadow);
   padding: 24px;
   backdrop-filter: blur(6px);
+  position: relative;
 }
 
 .fade-in {
-  opacity: 0;
   animation: fade .8s ease forwards;
+  opacity: 0;
 }
 
 @keyframes fade {
   to { opacity: 1; }
 }
 
-/* HERO */
+/* Hero */
 .hero {
   display: flex;
   align-items: center;
@@ -63,43 +63,56 @@ body {
 }
 
 .name {
+  margin: 0;
   font-size: 28px;
   display: flex;
-  gap: 6px;
+  gap: 8px;
 }
 
-.heart { color: var(--accent); }
-.subtitle { color: var(--text-muted); margin-top: 4px; }
+.heart {
+  color: var(--accent);
+}
 
-/* BUTTONS */
+.subtitle {
+  margin-top: 6px;
+  color: var(--text-muted);
+}
+
 .btn {
   background: var(--accent);
   color: white;
   border: none;
   padding: 8px 14px;
   border-radius: 14px;
+  box-shadow: var(--shadow);
   cursor: pointer;
   font-weight: 700;
-  box-shadow: var(--shadow);
 }
 
-.btn.small { padding: 6px 12px; }
+.btn.small {
+  padding: 6px 12px;
+  font-size: 14px;
+}
 
-/* SECTIONS */
-.section { margin-top: 28px; }
+/* Sections */
+.section { margin-top: 26px; }
 .text { color: var(--text-muted); line-height: 1.6; }
 
-/* LISTS */
+/* Lists */
 .soft-list {
   list-style: "✦ ";
-  padding-left: 20px;
+  padding-left: 22px;
   color: var(--text-muted);
 }
 
 .soft-list li { margin: 6px 0; }
-.muted { color: var(--text-muted); font-size: 14px; }
 
-/* ACCORDION */
+.muted {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* Accordion */
 .accordion-list {
   display: flex;
   flex-direction: column;
@@ -125,7 +138,7 @@ body {
 
 .accordion-content {
   display: none;
-  margin-top: 8px;
+  margin-top: 10px;
   color: var(--text-muted);
 }
 
@@ -133,25 +146,25 @@ body {
   display: block;
 }
 
-/* SPARKLES */
+/* Sparkles */
 .sparkle-layer::before {
   content: "✦ ✧ ✦ ✧ ✦ ✧";
   position: fixed;
-  top: 12%;
+  top: 10%;
   left: 0;
   right: 0;
   text-align: center;
-  opacity: .14;
   font-size: 22px;
-  animation: float 7s infinite ease-in-out;
+  opacity: 0.15;
+  animation: float 6s infinite ease-in-out;
   pointer-events: none;
 }
 
 @keyframes float {
-  50% { transform: translateY(12px); }
+  50% { transform: translateY(14px); }
 }
 
-/* FOOTER */
+/* Footer */
 .footer {
   margin-top: 20px;
   text-align: center;
