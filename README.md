@@ -2,7 +2,7 @@
 
 Pequeña página personal / bio cozy.
 
-**Demo:** https://YourTopHat.github.io/
+**Demo:** https://yourtophat.github.io/
 
 ## Editar
 - Modifica `index.html` y `assets/` para cambiar avatar, textos y música.
