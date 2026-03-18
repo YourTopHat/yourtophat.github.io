@@ -14,14 +14,15 @@
 
 /* DEFAULT DARK THEME */
 .dark {
-  --bg1: #120a12;
-  --bg2: #1a0f1c;
+  --bg1: #0d0a10;
+  --bg2: #1a1520;
+  
+  --card: #1f1826;
+  
+  --accent: #a05bff;
+  --accent-soft: #5c3a72;
 
-  --card: #1c121f;
-  --accent: #7a3f8f;
-  --accent-soft: #4b2c57;
-
-  --text-muted: #8e6f8a;
+  --text-muted: #bba3c9;
 }
 
 /* LIGHT THEME */
@@ -41,12 +42,26 @@ body, .page, .accordion-item, .avatar, .btn {
   transition: background-color .35s ease, color .35s ease, border-color .35s ease;
 }
 
+.dark .text,
+.dark .soft-list,
+.dark .muted,
+.dark .footer,
+.dark .accordion-content {
+  color: #e9e0f3;   /* Blanco violeta suave */
+}
+
 body {
   margin: 0;
   background: linear-gradient(180deg, var(--bg1), var(--bg2));
   display: flex;
   justify-content: center;
   padding: 30px;
+}
+
+.dark .page {
+  background: rgba(20, 14, 28, 0.72);  /* Oscuro, translúcido, cozy */
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 45px rgba(80, 50, 120, 0.35); /* Sombra violeta oscura */
 }
 
 .page {
@@ -107,6 +122,12 @@ body {
   color: var(--text-muted);
 }
 
+.dark .btn {
+  background: var(--accent);
+  color: #ffffff;
+  box-shadow: 0 6px 22px rgba(140, 90, 255, 0.35);
+}
+
 .btn {
   background: var(--accent);
   color: white;
@@ -149,6 +170,11 @@ body {
   margin-top: 14px;
 }
 
+.dark .accordion-item {
+  background: var(--card);
+  box-shadow: 0 6px 20px rgba(60, 40, 90, 0.35);
+}
+
 .accordion-item {
   background: var(--card);
   border-radius: var(--radius);
@@ -176,6 +202,12 @@ body {
 }
 
 /* Sparkles */
+
+.dark .sparkle-layer::before {
+  opacity: 0.1;
+  color: #caa6ff;
+}
+
 .sparkle-layer::before {
   content: "✦ ✧ ✦ ✧ ✦ ✧";
   position: fixed;
@@ -187,6 +219,16 @@ body {
   opacity: 0.15;
   animation: float 6s infinite ease-in-out;
   pointer-events: none;
+}
+
+.dark .fade-in {
+  animation: fadeDark .8s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeDark {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 @keyframes float {
