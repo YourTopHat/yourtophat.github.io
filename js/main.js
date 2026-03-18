@@ -51,3 +51,22 @@ toggleBtn.addEventListener("click", () => {
     toggleBtn.textContent = "🎵 Play Music";
   }
 });
+
+// ---------------------
+// THEME TOGGLE
+// ---------------------
+const themeBtn = document.getElementById("toggleTheme");
+const body = document.body;
+
+// default = night
+body.classList.add("dark");
+
+themeBtn.addEventListener("click", () => {
+  if (body.classList.contains("dark")) {
+    body.classList.replace("dark", "light");
+    themeBtn.textContent = "☀️ Day";
+  } else {
+    body.classList.replace("light", "dark");
+    themeBtn.textContent = "🌙 Night";
+  }
+});

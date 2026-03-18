@@ -12,6 +12,35 @@
   font-family: "Nunito", sans-serif;
 }
 
+/* DEFAULT DARK THEME */
+.dark {
+  --bg1: #f4e8ff;
+  --bg2: #e9dbff;
+
+  --card: #ffffff;
+  --accent: #b487ff;
+  --accent-soft: #dccaff;
+
+  --text-muted: #6d5e88;
+}
+
+/* LIGHT THEME */
+.light {
+  --bg1: #fff9fe;
+  --bg2: #ffeefe;
+
+  --card: #ffffff;
+  --accent: #cf91ff;
+  --accent-soft: #f2d9ff;
+
+  --text-muted: #7a6a97;
+}
+
+/* Theme transitions */
+body, .page, .accordion-item, .avatar, .btn {
+  transition: background-color .35s ease, color .35s ease, border-color .35s ease;
+}
+
 body {
   margin: 0;
   background: linear-gradient(180deg, var(--bg1), var(--bg2));
