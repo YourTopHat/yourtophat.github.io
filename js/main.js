@@ -1,67 +1,49 @@
 const friends = [
   {
-    id: 'a1',
-    name: 'Luna',
-    short: 'compañera de raids',
-    dedication: "Luna, gracias por ayudarme en tantas pruebas. Eres la mejor compañera de equipo y de cafecitos nocturnos. 🫶"
+    name: "Luna",
+    message:
+      "Luna is always there for me — soft vibes, late-night chats, and cozy support ✧"
   },
   {
-    id: 'a2',
-    name: 'Miko',
-    short: 'maestra de skins',
-    dedication: "Miko, tu estilo nunca falla. Gracias por enseñarme a combinar sombreros y paletas de color."
+    name: "Miko",
+    message:
+      "Miko has a magical sense for aesthetics and color palettes. Truly inspiring ✦"
   },
   {
-    id: 'a3',
-    name: 'Coder',
-    short: 'mentor de código',
-    dedication: "A Coder, que me explicó las promesas y me salvó del callback hell. ¡Eres top!"
+    name: "Coder",
+    message:
+      "Coder teaches me tricks, saves me from bugs, and laughs through chaos with me."
   }
 ];
 
-const grid = document.getElementById('friendsGrid');
-const modal = document.getElementById('cardModal');
-const modalContent = document.getElementById('modalContent');
-const closeModal = document.getElementById('closeModal');
+const list = document.getElementById("friendsList");
 
-function makeCard(friend){
-  const el = document.createElement('div');
-  el.className = 'card';
-  el.tabIndex = 0;
-  el.innerHTML = `
-    <div class="smallname">${friend.name}</div>
-    <div class="smalldesc">${friend.short}</div>
+friends.forEach(friend => {
+  const item = document.createElement("div");
+  item.className = "accordion-item";
+
+  item.innerHTML = `
+    <div class="accordion-header">${friend.name}</div>
+    <div class="accordion-content">${friend.message}</div>
   `;
-  el.addEventListener('click', ()=> openCard(friend));
-  el.addEventListener('keydown', (e)=> { if(e.key === 'Enter') openCard(friend) });
-  return el;
-}
 
-function openCard(friend){
-  modalContent.innerHTML = `
-    <h3>${friend.name}</h3>
-    <p style="color:var(--muted)">${friend.short}</p>
-    <hr style="opacity:.06;margin:12px 0">
-    <p>${friend.dedication}</p>
-  `;
-  modal.classList.remove('hidden');
-  modal.setAttribute('aria-hidden','false');
-}
+  item.addEventListener("click", () => {
+    item.classList.toggle("open");
+  });
 
-closeModal.addEventListener('click', ()=> {
-  modal.classList.add('hidden');
-  modal.setAttribute('aria-hidden','true');
+  list.appendChild(item);
 });
-modal.addEventListener('click', (e)=> {
-  if(e.target === modal) {
-    modal.classList.add('hidden');
-    modal.setAttribute('aria-hidden','true');
+
+// MUSIC TOGGLE
+const music = document.getElementById("bgMusic");
+const toggleBtn = document.getElementById("toggleMusic");
+
+toggleBtn.addEventListener("click", () => {
+  if (music.paused) {
+    music.play();
+    toggleBtn.textContent = "🔇 Pause";
+  } else {
+    music.pause();
+    toggleBtn.textContent = "🎵 Music";
   }
-});
-
-friends.forEach(f => grid.appendChild(makeCard(f)));
-
-// Toggle music
-document.getElementById('toggleMusic').addEventListener('click', ()=>{
-  alert('Puedes añadir tu pista en index.html y controlar su reproducción aquí. (Bloqueo por autoplay del navegador)');
 });
