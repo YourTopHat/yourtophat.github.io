@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hat — Superbio</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+  <meta name="description" content="Superbio de Hat — cozy kawaii profile" />
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <div class="hero-inner">
+        <!-- Pon aquí tu imagen de Hat (150x150 aprox.) -->
+        <div class="avatar" id="avatarPlaceholder" role="img" aria-label="Avatar Hat">
+          <!-- sustituye por <img src="ruta/a/tu/hat.png" alt="Hat"> -->
+          <div class="avatar-fallback">🎩</div>
+        </div>
+
+        <div class="title-block">
+          <h1 class="name">Hat <span class="accent">•</span></h1>
+          <p class="subtitle">Top-hat morado | dev aficionado | cozy vibes</p>
+        </div>
+
+        <div class="tag-row">
+          <span class="tag">cozy</span>
+          <span class="tag">kawaii</span>
+          <span class="tag">hat kid</span>
+          <span class="tag">programming</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="about">
+      <h2>Sobre mí</h2>
+      <p class="about-text">Soy Hat — me gusta el sombrero morado con banda amarilla, crear interfaces tiernas y jugar con código entre cafecitos. Esta es mi superbio minimal e interactiva.</p>
+      <div class="controls">
+        <button id="toggleMusic" class="btn small">🔊 Música</button>
+        <a class="btn small" href="https://github.com/" target="_blank" rel="noopener">Mi repo</a>
+      </div>
+    </section>
+
+    <section class="friends">
+      <h2>Amigos importantes</h2>
+      <p class="muted">Haz click en una tarjeta para leer mi dedicatoria ✨</p>
+
+      <div id="friendsGrid" class="grid">
+        <!-- JS inyects the cards -->
+      </div>
+    </section>
+
+    <footer class="footer">
+      <small>Hecho con 🫶 · Personalizable · Usa imágenes propias</small>
+      <div class="links">
+        <a href="#" id="openCredits">Instrucciones</a>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Card modal -->
+  <div id="cardModal" class="modal hidden" role="dialog" aria-hidden="true">
+    <div class="modal-card">
+      <button class="modal-close" id="closeModal">✕</button>
+      <div id="modalContent" class="modal-content">
+        <!-- Filled by JS -->
+      </div>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
