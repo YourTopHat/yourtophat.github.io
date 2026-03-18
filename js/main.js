@@ -1,84 +1,51 @@
+// FRIENDS DATA
 const friends = [
   {
-    id: 'a1',
-    name: 'Luna',
-    short: 'raids companion',
-    dedication: `Luna, thank you for joining me in so many trials. 
-You’re the best teammate and late‑night coffee buddy ✦`
+    name: "Luna",
+    message: "Luna is always there for me — soft vibes, late-night chats, and cozy support ✧"
   },
   {
-    id: 'a2',
-    name: 'Miko',
-    short: 'skin designer',
-    dedication: `Miko, your aesthetic sense is unmatched. 
-Thanks for teaching me how to match hats and palettes ⭐`
+    name: "Miko",
+    message: "Miko has a magical sense for aesthetics and color palettes. Truly inspiring ✦"
   },
   {
-    id: 'a3',
-    name: 'Coder',
-    short: 'code mentor',
-    dedication: `Coder, thanks for explaining promises 
-and saving me from callback hell. You're amazing ✧`
+    name: "Coder",
+    message: "Coder teaches me tricks, saves me from bugs, and laughs through chaos with me."
   }
 ];
 
-const grid = document.getElementById('friendsGrid');
-const modal = document.getElementById('cardModal');
-const modalContent = document.getElementById('modalContent');
-const closeModal = document.getElementById('closeModal');
+const list = document.getElementById("friendsList");
 
-function makeCard(friend) {
-  const el = document.createElement('div');
-  el.className = 'card';
-  el.tabIndex = 0;
-
-  el.innerHTML = `
-    <div class="smallname">${friend.name}</div>
-    <div class="smalldesc">${friend.short}</div>
+// CREATE CARDS
+friends.forEach(f => {
+  const item = document.createElement("div");
+  item.className = "accordion-item";
+  item.innerHTML = `
+    <div class="accordion-header">${f.name}</div>
+    <div class="accordion-content">${f.message}</div>
   `;
-
-  el.addEventListener('click', () => openCard(friend));
-  el.addEventListener('keydown', e => {
-    if (e.key === 'Enter') openCard(friend)
-  });
-
-  return el;
-}
-
-function openCard(friend) {
-  modalContent.innerHTML = `
-    <h4>${friend.name}</h4>
-    <p>${friend.short}</p>
-    <p>${friend.dedication}</p>
-  `;
-
-  modal.classList.remove('hidden');
-  modal.setAttribute('aria-hidden','false');
-}
-
-closeModal.addEventListener('click', () => {
-  modal.classList.add('hidden');
-  modal.setAttribute('aria-hidden','true');
+  item.onclick = () => item.classList.toggle("open");
+  list.appendChild(item);
 });
 
-modal.addEventListener('click', e => {
-  if (e.target === modal) {
-    modal.classList.add('hidden');
-    modal.setAttribute('aria-hidden','true');
-  }
-});
+// MUSIC
+const music = document.getElementById("bgMusic");
+const btn = document.getElementById("toggleMusic");
 
-friends.forEach(f => grid.appendChild(makeCard(f)));
+// Start music on first click anywhere
+document.addEventListener("click", function init() {
+  music.muted = false;
+  music.play();
+  document.removeEventListener("click", init);
+}, { once: true });
 
-const music = document.getElementById('bgMusic');
-const toggle = document.getElementById('toggleMusic');
-
-toggle.addEventListener('click', () => {
+// Toggle button
+btn.onclick = () => {
   if (music.paused) {
     music.play();
-    toggle.textContent = '🔇 Pause';
+    btn.textContent = "🔇 Pause";
   } else {
     music.pause();
-    toggle.textContent = '🎵 Music';
+    btn.textContent = "🎵 Play Music";
   }
-});
+};
