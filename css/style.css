@@ -111,19 +111,54 @@ body {
   gap: 20px;
 }
 
+/* Tablet hacia abajo: apilar contenido y ampliar toques */
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;   /* Avatar arriba, texto y controles debajo */
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .hero .controls {
+    justify-content: stretch;
+  }
+
+  .hero .controls .btn {
+    flex: 1 1 45%;      /* Dos por fila aprox. si cabe */
+    min-width: 140px;   /* Botón cómodo */
+  }
+}
+
+/* Móvil pequeño: 1 por fila si el ancho lo exige */
+@media (max-width: 420px) {
+  .hero .controls .btn {
+    flex: 1 1 100%;
+    min-width: 0;       /* Permite 1 por línea sin overflow */
+  }
+}
+
+/* Avatar SIEMPRE cuadrado y fluido */
 .avatar {
-  width: 110px;
-  height: 110px;
+  width: clamp(88px, 22vw, 120px);  /* Escala con pantalla, con límites */
+  aspect-ratio: 1 / 1;              /* Cuadrado perfecto */
   border-radius: var(--radius);
   overflow: hidden;
   border: 4px solid var(--accent);
   box-shadow: var(--shadow);
 }
 
+/* La imagen rellena el cuadrado sin deformarse */
 .avatar img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover;   /* Centrado y recorte natural, sin “aplastar” */
+  object-position: center;
 }
 
 .name {
@@ -261,4 +296,40 @@ body {
   text-align: center;
   color: var(--text-muted);
   font-size: 14px;
+}
+
+/* Contenedor de controles: permite salto de línea y espacios cómodos */
+.hero .controls {
+  display: flex;
+  flex-wrap: wrap;       /* Permite que los botones salten de línea */
+  gap: 10px;             /* Espacio constante entre botones */
+  align-items: center;
+}
+
+/* Botones: tamaño flexible y táctil */
+.hero .controls .btn {
+  flex: 1 1 auto;              /* Se expanden para ocupar huecos disponibles */
+  min-width: 120px;            /* Evita botones demasiado estrechos */
+  max-width: 220px;            /* Evita botones gigantes en tablet */
+  text-align: center;
+  line-height: 1.2;
+  padding: 10px 14px;          /* Tamaño táctil amigable */
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 18px;
+  }
+  .page {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 420px) {
+  body {
+    padding: 14px;
+  }
+  .page {
+    padding: 14px;
+  }
 }
