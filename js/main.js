@@ -1,7 +1,7 @@
 const friends = [
   {
-    name: "Luna",
-    message: "Luna is always there for me — soft vibes, late-night chats, and cozy support ✧"
+    name: "Brown Bear",
+    message: "🙏"
   },
   {
     name: "Miko",
