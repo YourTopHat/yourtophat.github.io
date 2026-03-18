@@ -25,7 +25,7 @@ const friends = [
   },
   {
     name: "Koko",
-    message: "I know our friendship has become a bit complicated over time, hehe, but you've been someone I could confide in, share thoughts... You've helped me take my mind off my problems, and I hope I've been able to do the same for you. You've been a bit difficult lately, haven't you? But I admit I have been too. I know it's partly because of what you've been through, but I still hope you always try to improve yourself. I love you, Koko"
+    message: "I know our friendship has become a bit complicated over time, hehe, but you've been someone I could confide in, share thoughts... You've helped me take my mind off my problems, and I hope I've been able to do the same for you. You've been a bit difficult lately, haven't you? But I admit I have been too. I know it's partly because of what you've been through, but I still hope you always try to improve yourself. I love you, Koko 🤍"
   },
   {
     name: "And some other special people ✨",
