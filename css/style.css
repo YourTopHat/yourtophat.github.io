@@ -14,14 +14,14 @@
 
 /* DEFAULT DARK THEME */
 .dark {
-  --bg1: #f4e8ff;
-  --bg2: #e9dbff;
+  --bg1: #120a12;
+  --bg2: #1a0f1c;
 
-  --card: #ffffff;
-  --accent: #b487ff;
-  --accent-soft: #dccaff;
+  --card: #1c121f;
+  --accent: #7a3f8f;
+  --accent-soft: #4b2c57;
 
-  --text-muted: #6d5e88;
+  --text-muted: #8e6f8a;
 }
 
 /* LIGHT THEME */

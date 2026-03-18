@@ -52,9 +52,6 @@ toggleBtn.addEventListener("click", () => {
   }
 });
 
-// ---------------------
-// THEME TOGGLE
-// ---------------------
 const themeBtn = document.getElementById("toggleTheme");
 const body = document.body;
 
