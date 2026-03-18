@@ -2,105 +2,83 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hat — Superbio</title>
 
-  <title>Hat — Cozy Profile</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700&display=swap" rel="stylesheet" />
-
+  <!-- Styles -->
   <link rel="stylesheet" href="css/style.css" />
 
-  <meta name="description" content="A cozy kawaii personal profile by Hat" />
+  <meta name="description" content="Superbio of Hat — cozy kawaii profile" />
 </head>
 <body>
 
-  <!-- Soft floating sparkles -->
-  <div class="sparkle-layer"></div>
+  <!-- Background music (kept exactly as it was) -->
+  <audio id="bgMusic" src="assets/music.mp3" autoplay loop></audio>
 
-  <main class="page fade-in">
+  <main class="page">
 
-    <!-- HERO -->
     <header class="hero">
-      <div class="avatar">
-        <img src="assets/hat.png" alt="Avatar">
-      </div>
+      <div class="hero-inner">
 
-      <div class="title-block">
-        <h1 class="name">Hat <span class="heart">✦</span></h1>
-        <p class="subtitle">Cozy Dev · Purple Top‑hat Enthusiast ✧</p>
+        <div class="avatar" id="avatarPlaceholder" role="img" aria-label="Avatar Hat">
+          <div class="avatar-fallback">🎩</div>
+        </div>
 
-        <div class="controls">
-          <button id="toggleMusic" class="btn small">🎵 Music</button>
-          <a class="btn small" href="https://github.com/YourTopHat" target="_blank">My GitHub</a>
+        <div class="title-block">
+          <h1 class="name">Hat <span class="accent">•</span></h1>
+          <p class="subtitle">
+            Purple top‑hat<br>
+            cozy dev<br>
+            cute vibes
+          </p>
+        </div>
+
+        <div class="tag-row">
+          <span class="tag">cozy</span>
+          <span class="tag">kawaii</span>
+          <span class="tag">hat kid</span>
+          <span class="tag">programming</span>
         </div>
       </div>
     </header>
 
-    <!-- ABOUT -->
-    <section class="section">
-      <h2>About Me</h2>
-      <p class="text">
-        Hello! I'm Hat — a cozy code enjoyer with a purple top‑hat and a love for soft vibes,
-        playful interfaces, and tiny magical designs. Welcome to my little corner of the internet.
+    <section class="about">
+      <h2>About me</h2>
+
+      <p class="about-text">
+        I'm Hat — a cosy coder with a purple hat, cute aesthetic and a passion for magical UI.
+        This is my tiny superbio ✦
       </p>
-    </section>
 
-    <!-- FRIENDS -->
-    <section class="section">
-      <h2>Friends</h2>
-      <p class="muted">Click any friend to read a cute message ✧</p>
-
-      <div id="friendsList" class="accordion-list">
-        <!-- JS injects the friend cards here -->
+      <div class="controls">
+        <button id="toggleMusic" class="btn small">🔊 Music</button>
+        <a class="btn small" href="https://github.com/" target="_blank" rel="noopener">My repo</a>
       </div>
     </section>
 
-    <!-- FAVORITE GAMES -->
-    <section class="section">
-      <h2>Favorite Games</h2>
+    <section class="friends">
+      <h2>Important friends</h2>
+      <p class="muted">Click a card to read my dedication ✨</p>
 
-      <ul class="soft-list">
-        <li>Stardew Valley</li>
-        <li>Animal Crossing</li>
-        <li>Splatoon</li>
-        <li>Genshin Impact</li>
-        <li>Minecraft (building cozy houses ✧)</li>
-      </ul>
+      <div id="friendsGrid" class="grid"></div>
     </section>
 
-    <!-- HOBBIES -->
-    <section class="section">
-      <h2>Hobbies</h2>
+    <!-- Modal -->
+    <div id="cardModal" class="modal hidden" role="dialog" aria-hidden="true">
+      <div class="modal-card">
+        <button class="modal-close" id="closeModal">✕</button>
+        <div id="modalContent" class="modal-content"></div>
+      </div>
+    </div>
 
-      <ul class="soft-list">
-        <li>Designing cute UI layouts</li>
-        <li>Drawing soft pastel characters</li>
-        <li>Collecting adorable hats</li>
-        <li>Learning new coding techniques</li>
-      </ul>
-    </section>
-
-    <!-- ASPIRATIONS -->
-    <section class="section">
-      <h2>Aspirations</h2>
-
-      <p class="text">
-        I'd love to grow as a developer, create wholesome digital experiences,
-        and maybe even build a cute game someday — full of comfort, magic, and silly hats.
-      </p>
-    </section>
-
-    <!-- FOOTER -->
     <footer class="footer">
-      <small>Made with ✦ by Hat · Cozy & Kawaii ✧</small>
+      <small>Made with care ✦ Customizable · Use your own images</small>
     </footer>
 
   </main>
-
-  <!-- BACKGROUND MUSIC -->
-    <audio id="bgMusic" src="assets/music.mp3" loop muted></audio>
-
 
   <script src="js/main.js"></script>
 </body>

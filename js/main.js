@@ -1,55 +1,84 @@
 const friends = [
   {
-    name: "Luna",
-    message:
-      "Luna is always there for me — soft vibes, late-night chats, and cozy support ✧"
+    id: 'a1',
+    name: 'Luna',
+    short: 'raids companion',
+    dedication: `Luna, thank you for joining me in so many trials. 
+You’re the best teammate and late‑night coffee buddy ✦`
   },
   {
-    name: "Miko",
-    message:
-      "Miko has a magical sense for aesthetics and color palettes. Truly inspiring ✦"
+    id: 'a2',
+    name: 'Miko',
+    short: 'skin designer',
+    dedication: `Miko, your aesthetic sense is unmatched. 
+Thanks for teaching me how to match hats and palettes ⭐`
   },
   {
-    name: "Coder",
-    message:
-      "Coder teaches me tricks, saves me from bugs, and laughs through chaos with me."
+    id: 'a3',
+    name: 'Coder',
+    short: 'code mentor',
+    dedication: `Coder, thanks for explaining promises 
+and saving me from callback hell. You're amazing ✧`
   }
 ];
 
-const list = document.getElementById("friendsList");
+const grid = document.getElementById('friendsGrid');
+const modal = document.getElementById('cardModal');
+const modalContent = document.getElementById('modalContent');
+const closeModal = document.getElementById('closeModal');
 
-friends.forEach(friend => {
-  const item = document.createElement("div");
-  item.className = "accordion-item";
+function makeCard(friend) {
+  const el = document.createElement('div');
+  el.className = 'card';
+  el.tabIndex = 0;
 
-  item.innerHTML = `
-    <div class="accordion-header">${friend.name}</div>
-    <div class="accordion-content">${friend.message}</div>
+  el.innerHTML = `
+    <div class="smallname">${friend.name}</div>
+    <div class="smalldesc">${friend.short}</div>
   `;
 
-  item.addEventListener("click", () => {
-    item.classList.toggle("open");
+  el.addEventListener('click', () => openCard(friend));
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Enter') openCard(friend)
   });
 
-  list.appendChild(item);
+  return el;
+}
+
+function openCard(friend) {
+  modalContent.innerHTML = `
+    <h4>${friend.name}</h4>
+    <p>${friend.short}</p>
+    <p>${friend.dedication}</p>
+  `;
+
+  modal.classList.remove('hidden');
+  modal.setAttribute('aria-hidden','false');
+}
+
+closeModal.addEventListener('click', () => {
+  modal.classList.add('hidden');
+  modal.setAttribute('aria-hidden','true');
 });
 
-const music = document.getElementById("bgMusic");
-const toggleBtn = document.getElementById("toggleMusic");
+modal.addEventListener('click', e => {
+  if (e.target === modal) {
+    modal.classList.add('hidden');
+    modal.setAttribute('aria-hidden','true');
+  }
+});
 
-function enableAudio() {
-  music.muted = false;
-  music.play();
-  document.removeEventListener("click", enableAudio);
-}
-document.addEventListener("click", enableAudio);
+friends.forEach(f => grid.appendChild(makeCard(f)));
 
-toggleBtn.addEventListener("click", () => {
+const music = document.getElementById('bgMusic');
+const toggle = document.getElementById('toggleMusic');
+
+toggle.addEventListener('click', () => {
   if (music.paused) {
     music.play();
-    toggleBtn.textContent = "🔇 Pause";
+    toggle.textContent = '🔇 Pause';
   } else {
     music.pause();
-    toggleBtn.textContent = "🎵 Play Music";
+    toggle.textContent = '🎵 Music';
   }
 });
