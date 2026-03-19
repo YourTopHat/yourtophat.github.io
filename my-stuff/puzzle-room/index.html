@@ -288,7 +288,16 @@
     .key::after { content: '🔑'; font-size: 1.2rem; }
     .portal-a::after, .portal-b::after { content: '◌'; font-size: 1.55rem; color: var(--accent); }
     .exit::after { content: '✿'; color: var(--good); font-size: 1.15rem; }
-    .door-closed::after { content: '▣'; color: #ffc0d1; font-size: 1.2rem; }
+    .door-closed::after {
+      content: '▣';
+      color: #ffc0d1;
+      font-size: 1.2rem;
+    }
+    .door-open::after {
+      content: '▢';
+      color: var(--good);
+      font-size: 1.2rem;
+    }
     .tile .overlay {
       position: absolute;
       inset: 0;
@@ -394,6 +403,16 @@
       color: var(--muted);
       font-weight: 600;
       margin-top: 3px;
+    }
+
+    .door-closed {
+      background: linear-gradient(180deg, rgba(255, 143, 176, 0.20), rgba(255, 143, 176, 0.08));
+      border: 1px solid rgba(255, 143, 176, 0.24);
+    }
+
+    .door-open {
+      background: linear-gradient(180deg, rgba(137, 230, 179, 0.20), rgba(137, 230, 179, 0.08));
+      border: 1px solid rgba(137, 230, 179, 0.24);
     }
 
     .floating-note {
@@ -632,12 +651,12 @@
         grid: [
           '#########',
           '#P..*...#',
-          '#..###...#',
-          '#........#',
-          '#..*..E..#',
-          '#........#',
-          '#...###..#',
-          '#........#',
+          '#..###..#',
+          '#.......#',
+          '#..*..E.#',
+          '#.......#',
+          '#...###.#',
+          '#.......#',
           '#########'
         ]
       },
@@ -764,6 +783,7 @@
         boxes,
         stars,
         collectedStars: 0,
+        totalStars: (level.grid.join('').match(/\*/g) || []).length,
         hasKey,
         moves: 0,
         finished: false,
@@ -872,7 +892,8 @@
     function updateHud() {
       hudLevel.textContent = `${currentLevelIndex + 1} / ${levels.length}`;
       hudMoves.textContent = String(state.moves);
-      hudStars.textContent = `${state.collectedStars} / ${state.level.grid.join('').split('*').length}`;
+      const totalStars = (state.level.grid.join('').match(/\*/g) || []).length;
+      hudStars.textContent = `${state.collectedStars} / ${state.totalStars}`;
       hudGoal.textContent = state.level.goal;
       levelTitle.textContent = state.level.name;
     }
@@ -927,8 +948,15 @@
           if (base === 'E') tile.classList.add('exit');
           if (base === 'S') tile.classList.add('switch');
           if (base === 'K') tile.classList.add('key');
-          if (base === 'D') tile.classList.add('door-closed');
-          if (base === 'L') tile.classList.add('door-closed');
+          if (base === 'D') {
+            if (isSwitchActive()) tile.classList.add('door-open');
+            else tile.classList.add('door-closed');
+          }
+
+          if (base === 'L') {
+            if (state.hasKey) tile.classList.add('door-open');
+            else tile.classList.add('door-closed');
+          }
           if (base === 'O') tile.classList.add('portal-a');
           if (base === 'o') tile.classList.add('portal-b');
 
