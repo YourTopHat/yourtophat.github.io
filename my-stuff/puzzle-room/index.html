@@ -644,88 +644,93 @@
 
     const levels = [
       {
-        name: 'Level 1 — First Sparkles',
+        name: 'Level 1 | First Sparkles',
         hint: 'Collect the two stars, then walk to the exit.',
         goal: 'Collect all stars and reach the exit',
         size: { w: 9, h: 9 },
         grid: [
           '#########',
-          '#P..*...#',
-          '#..###..#',
+          '#...P...#',
+          '####.####',
           '#.......#',
-          '#..*..E.#',
+          '#.*.#.*.#',
           '#.......#',
-          '#...###.#',
+          '#...E...#',
           '#.......#',
           '#########'
         ]
       },
       {
-        name: 'Level 2 — Switch & Box',
+        name: 'Level 2 | Switch & Box',
         hint: 'Push the box onto the switch. That opens the door.',
         goal: 'Open the door and reach the exit',
-        size: { w: 9, h: 9 },
+        size: { w: 10, h: 10 },
         grid: [
-          '#########',
-          '#P..B...#',
-          '#..###..#',
-          '#..S.D..#',
-          '#.......#',
-          '#..*....#',
-          '#...###E#',
-          '#.......#',
-          '#########'
+          '##########',
+          '#P......##',
+          '#..#B#....#',
+          '#.......#.#',
+          '#.S.....#*#',
+          '#.......D#',
+          '#.*#####.#',
+          '####...#.#',
+          '#E...#...#',
+          '##########'
         ]
       },
       {
-        name: 'Level 3 — The Little Key',
+        name: 'Level 3 | The Little Key',
         hint: 'Grab the key first, then pass the locked door.',
         goal: 'Take the key and exit',
-        size: { w: 9, h: 9 },
+        size: { w: 10, h: 10 },
         grid: [
-          '#########',
-          '#P..*...#',
-          '#.###.#..#',
-          '#...K.L..#',
+          '##########',
+          '#*......*#',
           '#..###...#',
-          '#...*....#',
-          '#..###.E.#',
-          '#........#',
-          '#########'
+          '#..LE#.K.#',
+          '#..#######',
+          '#.......*#',
+          '#....#####',
+          '#....#P..#',
+          '#*.......#',
+          '##########'
         ]
       },
       {
-        name: 'Level 4 — Portals',
+        name: 'Level 4 | Portals',
         hint: 'The purple portal sends you to the yellow one. Use that to reach the exit.',
         goal: 'Use the portal and reach the exit',
         size: { w: 9, h: 9 },
         grid: [
           '#########',
-          '#P.....O#',
-          '#.###.#.#',
-          '#...*...#',
-          '#.###.#.#',
-          '#o.....E#',
-          '#..###..#',
-          '#.......#',
+          '#...P...#',
+          '#.*...*.#',
+          '#...O...#',
+          '#########',
+          '#...o...#',
+          '#.*...*.#',
+          '#...E...#',
           '#########'
         ]
       },
       {
-        name: 'Level 5 — Cozy Combo',
+        name: 'Level 5 | Last Combo',
         hint: 'You need the key, a switch and a portal. Think before you move.',
         goal: 'Combine all mechanics and escape',
-        size: { w: 9, h: 9 },
+        size: { w: 12, h: 12 },
         grid: [
-          '#########',
-          '#P..B..O#',
-          '#.###.#.#',
-          '#..S.D..#',
-          '#..*K...#',
-          '#.###.#o#',
-          '#..L..E.#',
-          '#.......#',
-          '#########'
+          '############',
+          '#P....#...o#',
+          '#.....#....#',
+          '#..#..#B##D#',
+          '#...S##.#*K#',
+          '###.###.####',
+          '#....*.....#',
+          '#........*.#',
+          '#..#########',
+          '#..L...#...#',
+          '#..#.*...#E#',
+          '############'
         ]
       }
     ];
