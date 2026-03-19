@@ -19,7 +19,7 @@
       --good: #89e6b3;
       --bad: #ff8fb0;
       --shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
-      --cell: min(9.5vw, 56px);
+      --cell: 48px;
       --radius: 24px;
       font-family: 'Nunito', system-ui, sans-serif;
     }
@@ -222,6 +222,8 @@
       grid-template-columns: minmax(0, 1fr);
       gap: 12px;
       justify-items: center;
+      width: 100%;
+      overflow: hidden;
     }
 
     .board {
@@ -235,6 +237,7 @@
       border: 1px solid var(--border);
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
       max-width: 100%;
+      width: fit-content;
     }
 
     .tile {
@@ -403,16 +406,6 @@
       color: var(--muted);
       font-weight: 600;
       margin-top: 3px;
-    }
-
-    .door-closed {
-      background: linear-gradient(180deg, rgba(255, 143, 176, 0.20), rgba(255, 143, 176, 0.08));
-      border: 1px solid rgba(255, 143, 176, 0.24);
-    }
-
-    .door-open {
-      background: linear-gradient(180deg, rgba(137, 230, 179, 0.20), rgba(137, 230, 179, 0.08));
-      border: 1px solid rgba(137, 230, 179, 0.24);
     }
 
     .floating-note {
@@ -926,12 +919,28 @@
       });
     }
 
+    function fitBoardToViewport() {
+      if (!state) return;
+      const { w, h } = state.level.size;
+      const wrap = board.parentElement;
+      const gap = 6;
+      const padding = 14 * 2;
+      const maxWidth = Math.max(220, wrap.clientWidth || 0);
+      const topOffset = wrap.getBoundingClientRect().top;
+      const usableHeight = Math.max(240, window.innerHeight - topOffset - 260);
+      const widthBased = Math.floor((maxWidth - padding - gap * (w - 1)) / w);
+      const heightBased = Math.floor((usableHeight - padding - gap * (h - 1)) / h);
+      const cell = Math.max(18, Math.min(56, widthBased, heightBased));
+      board.style.setProperty('--cell', `${cell}px`);
+    }
+
     function loadLevel(index) {
       currentLevelIndex = index;
       state = cloneLevel(levels[index]);
       state.unlockedLevel = loadProgress();
       renderLevelButtons();
       updateHud();
+      fitBoardToViewport();
       draw();
       setStatus(`Level loaded: ${state.level.name}. ${state.level.hint}`);
     }
@@ -1177,6 +1186,11 @@
 
     setupTheme();
     loadLevel(0);
+    window.addEventListener('resize', () => {
+      if (!state) return;
+      fitBoardToViewport();
+      draw();
+    });
     setStatus('Collect all stars and go to the exit.');
   </script>
 </body>
