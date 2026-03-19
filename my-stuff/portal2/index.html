@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hat — Portal 2</title>
+  <meta name="description" content="Hat's Portal 2 subsection with characters, quotes, music and a YouTube embed." />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body class="dark">
+
+  <main class="site-shell">
+    <header class="topbar">
+      <div class="brand">
+        <a class="btn ghost" href="/my-stuff/">← Back</a>
+        <div>
+          <div class="eyebrow">my-stuff / portal2</div>
+          <h1>Portal 2</h1>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button id="toggleTheme" class="btn ghost">🌙 Night</button>
+        <a class="btn ghost" href="https://www.youtube.com/" target="_blank" rel="noreferrer">YouTube</a>
+      </div>
+    </header>
+
+    <section class="panel hero-split">
+      <div>
+        <p class="eyebrow">puzzle / comedy / sci-fi</p>
+        <h2>My little Portal 2 corner</h2>
+        <p class="lead">
+          This page is meant to feel like a tiny themed shrine: favourite characters, a few lines I love,
+          music buttons and a video at the end.
+        </p>
+
+        <div class="button-row">
+          <a class="btn" href="#characters">Jump to characters</a>
+          <a class="btn secondary" href="#music">Jump to music</a>
+        </div>
+      </div>
+
+      <div class="mini-card">
+        <h3>What belongs here?</h3>
+        <ul class="soft-list">
+          <li>Wheatley and GLaDOS images</li>
+          <li>Favourite quotes or scenes</li>
+          <li>Music buttons for the soundtrack</li>
+          <li>A YouTube embed at the end</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="panel" id="characters">
+      <div class="section-title">
+        <h2>Characters I like</h2>
+        <p>Swap the image paths for your own files inside <code>/assets/my-stuff/portal2/</code>.</p>
+      </div>
+
+      <div class="art-grid">
+        <figure class="art-card" data-label="Add your Wheatley image here">
+          <img
+            src="/assets/my-stuff/portal2/wheatley.png"
+            alt="Wheatley"
+            onerror="this.parentElement.classList.add('missing'); this.remove();"
+          />
+          <figcaption>Wheatley</figcaption>
+        </figure>
+
+        <figure class="art-card" data-label="Add your GLaDOS image here">
+          <img
+            src="/assets/my-stuff/portal2/glados.png"
+            alt="GLaDOS"
+            onerror="this.parentElement.classList.add('missing'); this.remove();"
+          />
+          <figcaption>GLaDOS</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-title">
+        <h2>Favourite quotes / moments</h2>
+        <p>Te dejo el bloque listo para que pongas aquí tus líneas favoritas del juego.</p>
+      </div>
+
+      <div class="grid-two">
+        <article class="quote-card">
+          <blockquote>
+            “Put one of your favourite Portal 2 lines here.”
+          </blockquote>
+          <div class="byline">— Hat</div>
+        </article>
+
+        <article class="quote-card">
+          <blockquote>
+            “Another quote, dialogue snippet or tiny reflection about the game.”
+          </blockquote>
+          <div class="byline">— a very serious science corner</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel" id="music">
+      <div class="section-title">
+        <h2>Music</h2>
+        <p>Buttons that play your local soundtrack files. Add the MP3s later and just keep the names.</p>
+      </div>
+
+      <div class="music-shell">
+        <div class="player-row">
+          <button id="toggleMusic" class="btn">▶ Play</button>
+          <div id="nowPlaying" class="now-playing">Pick a track</div>
+        </div>
+
+        <audio id="musicPlayer" preload="none" loop></audio>
+        <div id="trackList" class="track-list"></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-title">
+        <h2>YouTube video</h2>
+        <p>Paste the video ID you want in the embed URL below.</p>
+      </div>
+
+      <div class="video-wrap">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/VIDEO_ID_HERE"
+          title="Portal 2 video"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <small>Portal 2 subsection by Hat ✦</small>
+    </footer>
+  </main>
+
+  <script>
+    window.PORTAL2_TRACKS = [
+      {
+        label: 'Track 01',
+        src: '/assets/my-stuff/portal2/music/track-01.mp3'
+      },
+      {
+        label: 'Track 02',
+        src: '/assets/my-stuff/portal2/music/track-02.mp3'
+      },
+      {
+        label: 'Track 03',
+        src: '/assets/my-stuff/portal2/music/track-03.mp3'
+      },
+      {
+        label: 'Track 04',
+        src: '/assets/my-stuff/portal2/music/track-04.mp3'
+      }
+    ];
+  </script>
+  <script src="../main.js"></script>
+</body>
+</html>
