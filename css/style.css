@@ -373,7 +373,7 @@ body {
 
 .spotlight-btn {
   white-space: nowrap;
-  min-width: 170px;
+  min-width: 0px;
   text-align: center;
 }
 
@@ -385,5 +385,23 @@ body {
 
   .spotlight-btn {
     width: 100%;
+  }
+}
+
+.spotlight-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .spotlight-btn {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    white-space: normal;
+    line-height: 1.2;
   }
 }
