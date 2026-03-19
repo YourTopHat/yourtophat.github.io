@@ -247,6 +247,10 @@
       user-select: none;
     }
 
+    .tile.has-player {
+      z-index: 3;
+    }
+
     .floor { background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); }
     .wall { background: linear-gradient(180deg, #4b3b64, #392b4f); }
     .exit {
@@ -269,7 +273,17 @@
     .portal-b { background: linear-gradient(180deg, rgba(255, 213, 111, 0.18), rgba(180, 135, 255, 0.08)); }
     .star::after { content: '✦'; color: var(--accent-2); font-size: 1.25rem; filter: drop-shadow(0 0 8px rgba(255, 213, 111, 0.45)); }
     .box::after { content: '◻'; font-size: 1.3rem; color: #efe4ff; }
-    .player::after { content: '🎩'; font-size: 1.55rem; }
+    .player-token {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      z-index: 4;
+      pointer-events: none;
+      font-size: 1.55rem;
+    }
+
+    .player-token::after { content: '🎩'; }
     .switch::after { content: '◉'; color: var(--accent-2); font-size: 1.2rem; }
     .key::after { content: '🔑'; font-size: 1.2rem; }
     .portal-a::after, .portal-b::after { content: '◌'; font-size: 1.55rem; color: var(--accent); }
@@ -920,11 +934,18 @@
 
           if (starAt(x, y)) tile.classList.add('star');
           if (boxAt(x, y)) tile.classList.add('box');
-          if (state.player.x === x && state.player.y === y) tile.classList.add('player');
+          if (state.player.x === x && state.player.y === y) tile.classList.add('has-player');
 
           const overlay = document.createElement('div');
           overlay.className = 'overlay';
           tile.appendChild(overlay);
+
+          if (state.player.x === x && state.player.y === y) {
+            const player = document.createElement('span');
+            player.className = 'player-token';
+            tile.appendChild(player);
+          }
+
           board.appendChild(tile);
         }
       }
