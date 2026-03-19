@@ -242,11 +242,15 @@
 
     .tile {
       position: relative;
+      width: var(--cell);
+      height: var(--cell);
       border-radius: 18px;
       overflow: hidden;
-      display: grid;
-      place-items: center;
-      font-size: 1.45rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: calc(var(--cell) * 0.56);
+      line-height: 1;
       user-select: none;
     }
 
@@ -274,8 +278,72 @@
     }
     .portal-a { background: linear-gradient(180deg, rgba(180, 135, 255, 0.18), rgba(255, 213, 111, 0.08)); }
     .portal-b { background: linear-gradient(180deg, rgba(255, 213, 111, 0.18), rgba(180, 135, 255, 0.08)); }
-    .star::after { content: '✦'; color: var(--accent-2); font-size: 1.25rem; filter: drop-shadow(0 0 8px rgba(255, 213, 111, 0.45)); }
-    .box::after { content: '◻'; font-size: 1.3rem; color: #efe4ff; }
+    .star::after {
+      content: '✦';
+      color: var(--accent-2);
+      font-size: calc(var(--cell) * 0.42);
+      line-height: 1;
+      filter: drop-shadow(0 0 8px rgba(255, 213, 111, 0.45));
+    }
+
+    .box::after {
+      content: '◻';
+      font-size: calc(var(--cell) * 0.46);
+      color: #efe4ff;
+      line-height: 1;
+    }
+
+    .player-token {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      z-index: 4;
+      pointer-events: none;
+      font-size: calc(var(--cell) * 0.62);
+      line-height: 1;
+    }
+
+    .switch::after {
+      content: '◉';
+      color: var(--accent-2);
+      font-size: calc(var(--cell) * 0.42);
+      line-height: 1;
+    }
+
+    .key::after {
+      content: '🔑';
+      font-size: calc(var(--cell) * 0.42);
+      line-height: 1;
+    }
+
+    .portal-a::after,
+    .portal-b::after {
+      content: '◌';
+      font-size: calc(var(--cell) * 0.50);
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .exit::after {
+      content: '✿';
+      color: var(--good);
+      font-size: calc(var(--cell) * 0.42);
+      line-height: 1;
+    }
+
+    .door-closed::after {
+      content: '▣';
+      color: #ffc0d1;
+      line-height: 1;
+      font-size: calc(var(--cell) * 0.42);
+    }
+    .door-open::after {
+      content: '▢';
+      color: var(--good);
+      line-height: 1;
+      font-size: calc(var(--cell) * 0.42);
+    }
     .player-token {
       position: absolute;
       inset: 0;
@@ -287,20 +355,6 @@
     }
 
     .player-token::after { content: '🎩'; }
-    .switch::after { content: '◉'; color: var(--accent-2); font-size: 1.2rem; }
-    .key::after { content: '🔑'; font-size: 1.2rem; }
-    .portal-a::after, .portal-b::after { content: '◌'; font-size: 1.55rem; color: var(--accent); }
-    .exit::after { content: '✿'; color: var(--good); font-size: 1.15rem; }
-    .door-closed::after {
-      content: '▣';
-      color: #ffc0d1;
-      font-size: 1.2rem;
-    }
-    .door-open::after {
-      content: '▢';
-      color: var(--good);
-      font-size: 1.2rem;
-    }
     .tile .overlay {
       position: absolute;
       inset: 0;
