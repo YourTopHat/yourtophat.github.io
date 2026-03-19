@@ -1,0 +1,1129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hat — Cozy Puzzle Room</title>
+  <meta name="description" content="A cozy puzzle game by Hat with levels, switches, portals and a soft purple theme." />
+  <style>
+    :root {
+      --bg1: #0d0a10;
+      --bg2: #1a1520;
+      --panel: rgba(31, 23, 44, 0.84);
+      --panel-strong: rgba(42, 30, 60, 0.95);
+      --border: rgba(255, 255, 255, 0.10);
+      --text: #f8f2ff;
+      --muted: #c5b4da;
+      --accent: #b487ff;
+      --accent-2: #ffd76a;
+      --good: #89e6b3;
+      --bad: #ff8fb0;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+      --cell: min(9.5vw, 56px);
+      --radius: 24px;
+      font-family: 'Nunito', system-ui, sans-serif;
+    }
+
+    body.light {
+      --bg1: #fff7ff;
+      --bg2: #f3ecff;
+      --panel: rgba(255, 255, 255, 0.80);
+      --panel-strong: rgba(255, 255, 255, 0.94);
+      --border: rgba(96, 56, 132, 0.10);
+      --text: #241932;
+      --muted: #725f88;
+      --accent: #9d67ff;
+      --accent-2: #ffcb57;
+      --good: #2f9b68;
+      --bad: #d65c7d;
+      --shadow: 0 20px 50px rgba(124, 75, 214, 0.13);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(180, 135, 255, 0.22), transparent 30%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      padding: 22px;
+      overflow-x: hidden;
+    }
+
+    body, .panel, .btn, .tile, .hud-card, .level-pill, .modal-card, .floating-note {
+      transition: background-color .25s ease, color .25s ease, border-color .25s ease, transform .18s ease, box-shadow .25s ease;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, var(--accent), #9460ff);
+      border: 3px solid var(--accent-2);
+      box-shadow: var(--shadow);
+      display: grid;
+      place-items: center;
+      font-size: 1.55rem;
+      flex: 0 0 auto;
+    }
+
+    .eyebrow {
+      margin: 0 0 4px;
+      color: var(--muted);
+      font-size: .78rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    .topbar h1 { font-size: 1.3rem; }
+
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      border: 0;
+      cursor: pointer;
+      border-radius: 16px;
+      padding: 11px 14px;
+      font-weight: 800;
+      color: white;
+      background: var(--accent);
+      box-shadow: 0 12px 30px rgba(140, 90, 255, 0.18);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+    .btn.secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .btn.ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .btn.small { padding: 8px 12px; font-size: .95rem; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .game-panel {
+      padding: 18px;
+    }
+
+    .game-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .title-col { min-width: 0; }
+
+    .title-col h2 {
+      font-size: clamp(1.5rem, 2.5vw, 2rem);
+      margin-bottom: 6px;
+    }
+
+    .lead {
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 68ch;
+    }
+
+    .hud {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .hud-card {
+      background: var(--panel-strong);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 12px;
+      min-width: 0;
+    }
+
+    .hud-card span {
+      display: block;
+      color: var(--muted);
+      font-size: .82rem;
+      margin-bottom: 4px;
+    }
+
+    .hud-card strong {
+      font-size: 1.05rem;
+      overflow-wrap: anywhere;
+    }
+
+    .game-area {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .board-wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+      justify-items: center;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(9, var(--cell));
+      grid-template-rows: repeat(9, var(--cell));
+      gap: 6px;
+      padding: 14px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border: 1px solid var(--border);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+      max-width: 100%;
+    }
+
+    .tile {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      font-size: 1.45rem;
+      user-select: none;
+    }
+
+    .floor { background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); }
+    .wall { background: linear-gradient(180deg, #4b3b64, #392b4f); }
+    .exit {
+      background: linear-gradient(180deg, rgba(137, 230, 179, 0.18), rgba(137, 230, 179, 0.08));
+      border: 1px solid rgba(137, 230, 179, 0.22);
+    }
+    .door-closed {
+      background: linear-gradient(180deg, rgba(255, 143, 176, 0.20), rgba(255, 143, 176, 0.08));
+      border: 1px solid rgba(255, 143, 176, 0.24);
+    }
+    .switch {
+      background: linear-gradient(180deg, rgba(255, 213, 111, 0.18), rgba(255, 213, 111, 0.08));
+      border: 1px solid rgba(255, 213, 111, 0.2);
+    }
+    .key {
+      background: linear-gradient(180deg, rgba(180, 135, 255, 0.18), rgba(180, 135, 255, 0.08));
+      border: 1px solid rgba(180, 135, 255, 0.22);
+    }
+    .portal-a { background: linear-gradient(180deg, rgba(180, 135, 255, 0.18), rgba(255, 213, 111, 0.08)); }
+    .portal-b { background: linear-gradient(180deg, rgba(255, 213, 111, 0.18), rgba(180, 135, 255, 0.08)); }
+    .star::after { content: '✦'; color: var(--accent-2); font-size: 1.25rem; filter: drop-shadow(0 0 8px rgba(255, 213, 111, 0.45)); }
+    .box::after { content: '◻'; font-size: 1.3rem; color: #efe4ff; }
+    .player::after { content: '🎩'; font-size: 1.55rem; }
+    .switch::after { content: '◉'; color: var(--accent-2); font-size: 1.2rem; }
+    .key::after { content: '🔑'; font-size: 1.2rem; }
+    .portal-a::after, .portal-b::after { content: '◌'; font-size: 1.55rem; color: var(--accent); }
+    .exit::after { content: '✿'; color: var(--good); font-size: 1.15rem; }
+    .door-closed::after { content: '▣'; color: #ffc0d1; font-size: 1.2rem; }
+    .tile .overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 35%, rgba(255,255,255,0.10), transparent 56%);
+      pointer-events: none;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .level-pill, .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-weight: 800;
+    }
+
+    .chip { font-weight: 700; color: var(--muted); }
+
+    .controls-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .dpad {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      width: min(100%, 280px);
+      margin: 0 auto;
+    }
+
+    .dpad .btn { min-width: 0; width: 100%; }
+    .dpad .empty { visibility: hidden; }
+
+    .sidebar {
+      display: grid;
+      gap: 16px;
+      position: sticky;
+      top: 16px;
+    }
+
+    .side-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      backdrop-filter: blur(10px);
+    }
+
+    .side-card h3 {
+      margin-bottom: 8px;
+      font-size: 1.05rem;
+    }
+
+    .side-card p, .side-card li {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .soft-list {
+      margin: 12px 0 0;
+      padding-left: 20px;
+    }
+
+    .level-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .level-btn {
+      text-align: left;
+      width: 100%;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 12px 14px;
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .level-btn.active {
+      background: rgba(180, 135, 255, 0.18);
+      border-color: rgba(180, 135, 255, 0.35);
+    }
+
+    .level-btn small {
+      display: block;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 3px;
+    }
+
+    .floating-note {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .status-line {
+      margin-top: 10px;
+      color: var(--muted);
+      min-height: 1.4em;
+    }
+
+    .status-line.good { color: var(--good); }
+    .status-line.bad { color: var(--bad); }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(0,0,0,0.42);
+      z-index: 60;
+    }
+
+    .modal.open { display: flex; }
+
+    .modal-card {
+      width: min(540px, 100%);
+      background: var(--panel-strong);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+
+    .modal-card h3 { margin-bottom: 8px; }
+    .modal-card p { color: var(--muted); line-height: 1.75; }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .footer-bar {
+      margin-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .sparkles::before {
+      content: '✦ ✧ ✦ ✧ ✦ ✧';
+      position: fixed;
+      top: 8%;
+      left: 0;
+      right: 0;
+      text-align: center;
+      pointer-events: none;
+      color: rgba(255,255,255,0.28);
+      font-size: 20px;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      50% { transform: translateY(12px); }
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.94); }
+      100% { transform: scale(1); }
+    }
+
+    .pop-in { animation: pop .18s ease; }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+    }
+
+    @media (max-width: 620px) {
+      body { padding: 14px; }
+      .game-panel { padding: 14px; }
+      .panel, .side-card { border-radius: 22px; }
+      .board {
+        gap: 4px;
+        padding: 10px;
+        border-radius: 22px;
+      }
+      :root { --cell: min(11.2vw, 48px); }
+      .hud { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body class="dark sparkles">
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="avatar">🎩</div>
+        <div>
+          <p class="eyebrow">my-stuff / puzzle room</p>
+          <h1>Hat's Cozy Puzzle Room</h1>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button id="toggleThemeTop" class="btn ghost">🌙 Night</button>
+        <a class="btn ghost" href="../">← Back to my-stuff</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <section class="panel game-panel">
+        <div class="game-header">
+          <div class="title-col">
+            <h2>Little puzzle levels with soft vibes</h2>
+            <p class="lead">
+              Move with WASD / arrows, push boxes, step on switches, grab the key, pass portals and reach the exit.
+              Each level is short, but some get a bit tricky.
+            </p>
+          </div>
+          <div class="top-actions">
+            <button id="restartBtn" class="btn secondary">↻ Restart</button>
+            <button id="hintBtn" class="btn secondary">💡 Hint</button>
+          </div>
+        </div>
+
+        <div class="hud">
+          <div class="hud-card"><span>Level</span><strong id="hudLevel">1 / 5</strong></div>
+          <div class="hud-card"><span>Moves</span><strong id="hudMoves">0</strong></div>
+          <div class="hud-card"><span>Stars</span><strong id="hudStars">0 / 0</strong></div>
+          <div class="hud-card"><span>Goal</span><strong id="hudGoal">Reach exit</strong></div>
+        </div>
+
+        <div class="game-area">
+          <div class="board-wrap">
+            <div id="board" class="board" aria-label="Puzzle board" role="grid"></div>
+            <div class="info-row" style="width:100%;max-width:720px;">
+              <div class="chip" id="stateChip">Cute calm brain on</div>
+              <div class="level-pill" id="levelTitle">Level 1 — First Sparkles</div>
+            </div>
+          </div>
+
+          <div class="controls-grid">
+            <div class="dpad" aria-label="Movement controls">
+              <div class="empty">.</div>
+              <button class="btn" data-move="up">▲</button>
+              <div class="empty">.</div>
+              <button class="btn" data-move="left">◀</button>
+              <button class="btn" data-move="down">▼</button>
+              <button class="btn" data-move="right">▶</button>
+            </div>
+          </div>
+
+          <div class="status-line" id="statusLine">Collect all stars and go to the exit.</div>
+        </div>
+
+        <div class="footer-bar">
+          <small>Tip: switches need boxes, portals teleport you, and the key opens the locked door.</small>
+          <small>Progress saves automatically.</small>
+        </div>
+      </section>
+
+      <aside class="sidebar">
+        <section class="side-card">
+          <h3>Level select</h3>
+          <p>Jump between the 5 levels. Your highest unlocked level is saved locally.</p>
+          <div id="levelList" class="level-list"></div>
+        </section>
+
+        <section class="side-card">
+          <h3>Controls</h3>
+          <ul class="soft-list">
+            <li>Move: WASD or arrow keys</li>
+            <li>Restart: R</li>
+            <li>Theme: T</li>
+            <li>Level: number keys 1–5</li>
+          </ul>
+        </section>
+
+        <section class="side-card">
+          <h3>How this works</h3>
+          <p>
+            This is all frontend-only, so it fits perfectly inside GitHub Pages. You can later add more levels
+            by cloning the level objects in the JavaScript.
+          </p>
+          <div class="floating-note">
+            Cozy extras already included: soft animations, saved progress, hint system, level select, light/dark theme
+            and gentle sound effects using the browser only.
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <div class="modal" id="modal">
+    <div class="modal-card">
+      <h3 id="modalTitle">Level cleared ✨</h3>
+      <p id="modalText">You solved the room.</p>
+      <div class="modal-actions">
+        <button id="nextLevelBtn" class="btn">Next level</button>
+        <button id="closeModalBtn" class="btn secondary">Keep exploring</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEYS = {
+      theme: 'yourtophat:puzzle-theme',
+      progress: 'yourtophat:puzzle-progress'
+    };
+
+    const levels = [
+      {
+        name: 'Level 1 — First Sparkles',
+        hint: 'Collect the two stars, then walk to the exit.',
+        goal: 'Collect all stars and reach the exit',
+        size: { w: 9, h: 9 },
+        grid: [
+          '#########',
+          '#P..*...#',
+          '#..###...#',
+          '#........#',
+          '#..*..E..#',
+          '#........#',
+          '#...###..#',
+          '#........#',
+          '#########'
+        ]
+      },
+      {
+        name: 'Level 2 — Switch & Box',
+        hint: 'Push the box onto the switch. That opens the door.',
+        goal: 'Open the door and reach the exit',
+        size: { w: 9, h: 9 },
+        grid: [
+          '#########',
+          '#P..B...#',
+          '#..###..#',
+          '#..S.D..#',
+          '#.......#',
+          '#..*....#',
+          '#...###E#',
+          '#.......#',
+          '#########'
+        ]
+      },
+      {
+        name: 'Level 3 — The Little Key',
+        hint: 'Grab the key first, then pass the locked door.',
+        goal: 'Take the key and exit',
+        size: { w: 9, h: 9 },
+        grid: [
+          '#########',
+          '#P..*...#',
+          '#.###.#..#',
+          '#...K.L..#',
+          '#..###...#',
+          '#...*....#',
+          '#..###.E.#',
+          '#........#',
+          '#########'
+        ]
+      },
+      {
+        name: 'Level 4 — Portals',
+        hint: 'The purple portal sends you to the yellow one. Use that to reach the exit.',
+        goal: 'Use the portal and reach the exit',
+        size: { w: 9, h: 9 },
+        grid: [
+          '#########',
+          '#P.....O#',
+          '#.###.#.#',
+          '#...*...#',
+          '#.###.#.#',
+          '#o.....E#',
+          '#..###..#',
+          '#.......#',
+          '#########'
+        ]
+      },
+      {
+        name: 'Level 5 — Cozy Combo',
+        hint: 'You need the key, a switch and a portal. Think before you move.',
+        goal: 'Combine all mechanics and escape',
+        size: { w: 9, h: 9 },
+        grid: [
+          '#########',
+          '#P..B..O#',
+          '#.###.#.#',
+          '#..S.D..#',
+          '#..*K...#',
+          '#.###.#o#',
+          '#..L..E.#',
+          '#.......#',
+          '#########'
+        ]
+      }
+    ];
+
+    const board = document.getElementById('board');
+    const levelList = document.getElementById('levelList');
+    const hudLevel = document.getElementById('hudLevel');
+    const hudMoves = document.getElementById('hudMoves');
+    const hudStars = document.getElementById('hudStars');
+    const hudGoal = document.getElementById('hudGoal');
+    const levelTitle = document.getElementById('levelTitle');
+    const statusLine = document.getElementById('statusLine');
+    const stateChip = document.getElementById('stateChip');
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalText = document.getElementById('modalText');
+    const nextLevelBtn = document.getElementById('nextLevelBtn');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const hintBtn = document.getElementById('hintBtn');
+    const toggleThemeTop = document.getElementById('toggleThemeTop');
+
+    let state = null;
+    let currentLevelIndex = 0;
+
+    function cloneLevel(level) {
+      const grid = level.grid.map(row => row.split(''));
+      let player = { x: 0, y: 0 };
+      let stars = [];
+      let boxes = [];
+      let hasKey = false;
+
+      for (let y = 0; y < grid.length; y++) {
+        for (let x = 0; x < grid[y].length; x++) {
+          const cell = grid[y][x];
+          if (cell === 'P') {
+            player = { x, y };
+            grid[y][x] = '.';
+          }
+          if (cell === '*') {
+            stars.push({ x, y });
+            grid[y][x] = '.';
+          }
+          if (cell === 'B') {
+            boxes.push({ x, y });
+            grid[y][x] = '.';
+          }
+        }
+      }
+
+      return {
+        level,
+        grid,
+        player,
+        boxes,
+        stars,
+        collectedStars: 0,
+        hasKey,
+        moves: 0,
+        finished: false,
+        unlockedLevel: loadProgress(),
+        portals: findPortals(grid)
+      };
+    }
+
+    function loadProgress() {
+      const saved = Number(localStorage.getItem(STORAGE_KEYS.progress));
+      if (!Number.isNaN(saved) && saved >= 1) return Math.min(saved, levels.length);
+      return 1;
+    }
+
+    function saveProgress(levelNumber) {
+      const current = loadProgress();
+      localStorage.setItem(STORAGE_KEYS.progress, String(Math.max(current, levelNumber)));
+    }
+
+    function getTheme() {
+      const saved = localStorage.getItem(STORAGE_KEYS.theme);
+      if (saved === 'light' || saved === 'dark') return saved;
+      return document.body.classList.contains('light') ? 'light' : 'dark';
+    }
+
+    function applyTheme(theme) {
+      document.body.classList.remove('light', 'dark');
+      document.body.classList.add(theme);
+      localStorage.setItem(STORAGE_KEYS.theme, theme);
+      toggleThemeTop.textContent = theme === 'dark' ? '🌙 Night' : '☀️ Day';
+    }
+
+    function beep(type = 'move') {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.value = type === 'clear' ? 660 : type === 'fail' ? 180 : 320;
+        gain.gain.value = 0.03;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.06);
+        osc.onended = () => ctx.close();
+      } catch (e) {
+        // silent fail
+      }
+    }
+
+    function findPortals(grid) {
+      const portals = { A: [], B: [] };
+      for (let y = 0; y < grid.length; y++) {
+        for (let x = 0; x < grid[y].length; x++) {
+          if (grid[y][x] === 'O') portals.A.push({ x, y });
+          if (grid[y][x] === 'o') portals.B.push({ x, y });
+        }
+      }
+      return portals;
+    }
+
+    function getTile(x, y) {
+      if (y < 0 || y >= state.grid.length) return '#';
+      if (x < 0 || x >= state.grid[y].length) return '#';
+      return state.grid[y][x];
+    }
+
+    function setTile(x, y, value) {
+      state.grid[y][x] = value;
+    }
+
+    function boxAt(x, y) {
+      return state.boxes.find(b => b.x === x && b.y === y);
+    }
+
+    function starAt(x, y) {
+      return state.stars.find(s => s.x === x && s.y === y);
+    }
+
+    function tilePassable(x, y, movingBox = false) {
+      const t = getTile(x, y);
+      if (t === '#') return false;
+      if (t === 'D') return isSwitchActive();
+      if (t === 'L') return state.hasKey;
+      if (t === 'B' || t === 'P') return false;
+      const b = boxAt(x, y);
+      if (b) return false;
+      if (movingBox && (t === 'E' || t === 'K' || t === 'S' || t === 'O' || t === 'o')) return true;
+      return true;
+    }
+
+    function isSwitchActive() {
+      const switches = [];
+      for (let y = 0; y < state.grid.length; y++) {
+        for (let x = 0; x < state.grid[y].length; x++) {
+          if (state.grid[y][x] === 'S') switches.push({ x, y });
+        }
+      }
+      return switches.some(s => boxAt(s.x, s.y));
+    }
+
+    function remainingStars() {
+      return state.stars.length;
+    }
+
+    function updateHud() {
+      hudLevel.textContent = `${currentLevelIndex + 1} / ${levels.length}`;
+      hudMoves.textContent = String(state.moves);
+      hudStars.textContent = `${state.collectedStars} / ${state.level.grid.join('').split('*').length}`;
+      hudGoal.textContent = state.level.goal;
+      levelTitle.textContent = state.level.name;
+    }
+
+    function setStatus(text, kind = '') {
+      statusLine.className = 'status-line' + (kind ? ` ${kind}` : '');
+      statusLine.textContent = text;
+    }
+
+    function renderLevelButtons() {
+      const unlocked = loadProgress();
+      levelList.innerHTML = levels.map((lvl, i) => `
+        <button class="level-btn ${i === currentLevelIndex ? 'active' : ''}" data-level="${i}">
+          ${i + 1}. ${lvl.name}
+          <small>${i < unlocked ? 'Unlocked' : 'Locked'} · ${lvl.goal}</small>
+        </button>
+      `).join('');
+
+      levelList.querySelectorAll('.level-btn').forEach(btn => {
+        btn.disabled = Number(btn.dataset.level) >= loadProgress();
+        btn.addEventListener('click', () => {
+          const idx = Number(btn.dataset.level);
+          if (idx < loadProgress()) loadLevel(idx);
+        });
+      });
+    }
+
+    function loadLevel(index) {
+      currentLevelIndex = index;
+      state = cloneLevel(levels[index]);
+      state.unlockedLevel = loadProgress();
+      renderLevelButtons();
+      updateHud();
+      draw();
+      setStatus(`Level loaded: ${state.level.name}. ${state.level.hint}`);
+    }
+
+    function draw() {
+      board.innerHTML = '';
+      const { w, h } = state.level.size;
+      board.style.gridTemplateColumns = `repeat(${w}, var(--cell))`;
+      board.style.gridTemplateRows = `repeat(${h}, var(--cell))`;
+
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          const tile = document.createElement('div');
+          tile.className = 'tile floor pop-in';
+          tile.setAttribute('role', 'gridcell');
+
+          const base = getTile(x, y);
+          if (base === '#') tile.classList.add('wall');
+          if (base === 'E') tile.classList.add('exit');
+          if (base === 'S') tile.classList.add('switch');
+          if (base === 'K') tile.classList.add('key');
+          if (base === 'D') tile.classList.add('door-closed');
+          if (base === 'L') tile.classList.add('door-closed');
+          if (base === 'O') tile.classList.add('portal-a');
+          if (base === 'o') tile.classList.add('portal-b');
+
+          if (starAt(x, y)) tile.classList.add('star');
+          if (boxAt(x, y)) tile.classList.add('box');
+          if (state.player.x === x && state.player.y === y) tile.classList.add('player');
+
+          const overlay = document.createElement('div');
+          overlay.className = 'overlay';
+          tile.appendChild(overlay);
+          board.appendChild(tile);
+        }
+      }
+
+      updateHud();
+      levelList.querySelectorAll('.level-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === currentLevelIndex);
+      });
+    }
+
+    function move(dx, dy) {
+      if (state.finished) return;
+      const nx = state.player.x + dx;
+      const ny = state.player.y + dy;
+      const target = getTile(nx, ny);
+      const box = boxAt(nx, ny);
+
+      if (target === '#') {
+        beep('fail');
+        setStatus('A wall is in the way.', 'bad');
+        return;
+      }
+
+      if (target === 'D' && !isSwitchActive()) {
+        beep('fail');
+        setStatus('The door is still closed. Put a box on the switch.', 'bad');
+        return;
+      }
+
+      if (target === 'L' && !state.hasKey) {
+        beep('fail');
+        setStatus('You need the key first.', 'bad');
+        return;
+      }
+
+      if (box) {
+        const bx = nx + dx;
+        const by = ny + dy;
+        const beyond = getTile(bx, by);
+        if (!tilePassable(bx, by, true) || boxAt(bx, by)) {
+          beep('fail');
+          setStatus('The box cannot move there.', 'bad');
+          return;
+        }
+        if (beyond === 'D' && !isSwitchActive()) {
+          beep('fail');
+          setStatus('The box cannot push through a closed door.', 'bad');
+          return;
+        }
+        if (beyond === 'L' && !state.hasKey) {
+          beep('fail');
+          setStatus('The locked door needs the key first.', 'bad');
+          return;
+        }
+
+        box.x = bx;
+        box.y = by;
+      }
+
+      state.player.x = nx;
+      state.player.y = ny;
+      state.moves += 1;
+      beep('move');
+
+      collectStarAtPlayer();
+      pickUpKey();
+      handlePortals();
+      draw();
+      checkWin();
+    }
+
+    function collectStarAtPlayer() {
+      const idx = state.stars.findIndex(s => s.x === state.player.x && s.y === state.player.y);
+      if (idx >= 0) {
+        state.stars.splice(idx, 1);
+        state.collectedStars += 1;
+        beep('move');
+        setStatus('Sparkle collected ✦', 'good');
+      }
+    }
+
+    function pickUpKey() {
+      if (getTile(state.player.x, state.player.y) === 'K') {
+        state.hasKey = true;
+        setTile(state.player.x, state.player.y, '.');
+        beep('move');
+        setStatus('You picked up the key.', 'good');
+      }
+    }
+
+    function handlePortals() {
+      const tile = getTile(state.player.x, state.player.y);
+      if (tile === 'O') {
+        const dest = state.portals.B[0];
+        if (dest) {
+          state.player.x = dest.x;
+          state.player.y = dest.y;
+          setStatus('Portal hop! ✨', 'good');
+          beep('move');
+        }
+      }
+      if (tile === 'o') {
+        const dest = state.portals.A[0];
+        if (dest) {
+          state.player.x = dest.x;
+          state.player.y = dest.y;
+          setStatus('Portal hop! ✨', 'good');
+          beep('move');
+        }
+      }
+    }
+
+    function checkWin() {
+      const tile = getTile(state.player.x, state.player.y);
+      const exitTouched = tile === 'E';
+      const starsCleared = remainingStars() === 0;
+      const needsKey = state.level.grid.join('').includes('L') ? state.hasKey : true;
+
+      if (exitTouched && starsCleared && needsKey) {
+        state.finished = true;
+        const unlocked = Math.min(levels.length, Math.max(loadProgress(), currentLevelIndex + 2));
+        saveProgress(unlocked);
+        renderLevelButtons();
+        updateHud();
+        modalTitle.textContent = currentLevelIndex === levels.length - 1 ? 'All levels complete ✨' : 'Level cleared ✨';
+        modalText.textContent = currentLevelIndex === levels.length - 1
+          ? 'You solved every cozy room. That is very adorable and very impressive.'
+          : 'You solved the room. A new level is now unlocked.';
+        modal.classList.add('open');
+        beep('clear');
+        setStatus('Room cleared ✨', 'good');
+      } else {
+        updateHud();
+      }
+    }
+
+    function restartLevel() {
+      loadLevel(currentLevelIndex);
+      setStatus('Level restarted.', 'good');
+    }
+
+    function showHint() {
+      const hint = levels[currentLevelIndex].hint;
+      setStatus(hint, '');
+    }
+
+    function nextLevel() {
+      modal.classList.remove('open');
+      if (currentLevelIndex < levels.length - 1) {
+        loadLevel(currentLevelIndex + 1);
+      } else {
+        setStatus('You already finished the full puzzle room!', 'good');
+      }
+    }
+
+    function setupTheme() {
+      applyTheme(getTheme());
+      toggleThemeTop.addEventListener('click', () => {
+        applyTheme(document.body.classList.contains('dark') ? 'light' : 'dark');
+      });
+    }
+
+    document.querySelectorAll('[data-move]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const dir = btn.dataset.move;
+        if (dir === 'up') move(0, -1);
+        if (dir === 'down') move(0, 1);
+        if (dir === 'left') move(-1, 0);
+        if (dir === 'right') move(1, 0);
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      const key = e.key.toLowerCase();
+      if (key === 'arrowup' || key === 'w') { e.preventDefault(); move(0, -1); }
+      if (key === 'arrowdown' || key === 's') { e.preventDefault(); move(0, 1); }
+      if (key === 'arrowleft' || key === 'a') { e.preventDefault(); move(-1, 0); }
+      if (key === 'arrowright' || key === 'd') { e.preventDefault(); move(1, 0); }
+      if (key === 'r') restartLevel();
+      if (key === 't') {
+        applyTheme(document.body.classList.contains('dark') ? 'light' : 'dark');
+      }
+      if (key >= '1' && key <= '5') {
+        const idx = Number(key) - 1;
+        if (idx < loadProgress()) loadLevel(idx);
+      }
+    });
+
+    restartBtn.addEventListener('click', restartLevel);
+    hintBtn.addEventListener('click', showHint);
+    nextLevelBtn.addEventListener('click', nextLevel);
+    closeModalBtn.addEventListener('click', () => modal.classList.remove('open'));
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.classList.remove('open');
+    });
+
+    setupTheme();
+    loadLevel(0);
+    setStatus('Collect all stars and go to the exit.');
+  </script>
+</body>
+</html>
