@@ -59,6 +59,7 @@ const toggleBtn = document.getElementById("toggleMusic");
 document.addEventListener("click", function startAudio() {
   music.muted = false;
   music.play();
+  toggleBtn.textContent = "🔇 Pause";
   document.removeEventListener("click", startAudio);
 });
 
