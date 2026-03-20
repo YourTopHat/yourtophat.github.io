@@ -223,30 +223,36 @@
       gap: 12px;
       justify-items: center;
       width: 100%;
-      overflow: hidden;
+      overflow: auto;
+      padding-bottom: 4px;
     }
 
     .board {
       display: grid;
       grid-template-columns: repeat(9, var(--cell));
       grid-template-rows: repeat(9, var(--cell));
-      gap: 6px;
-      padding: 14px;
+      gap: 4px;
+      padding: 12px;
       border-radius: 28px;
       background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
       border: 1px solid var(--border);
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
-      max-width: 100%;
-      width: fit-content;
+      width: max-content;
+      max-width: none;
+      margin: 0 auto;
     }
 
     .tile {
       position: relative;
+      width: var(--cell);
+      height: var(--cell);
       border-radius: 18px;
       overflow: hidden;
-      display: grid;
-      place-items: center;
-      font-size: 1.45rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: calc(var(--cell) * 0.56);
+      line-height: 1;
       user-select: none;
     }
 
@@ -274,8 +280,21 @@
     }
     .portal-a { background: linear-gradient(180deg, rgba(180, 135, 255, 0.18), rgba(255, 213, 111, 0.08)); }
     .portal-b { background: linear-gradient(180deg, rgba(255, 213, 111, 0.18), rgba(180, 135, 255, 0.08)); }
-    .star::after { content: '✦'; color: var(--accent-2); font-size: 1.25rem; filter: drop-shadow(0 0 8px rgba(255, 213, 111, 0.45)); }
-    .box::after { content: '◻'; font-size: 1.3rem; color: #efe4ff; }
+    .star::after {
+      content: '✦';
+      color: var(--accent-2);
+      font-size: calc(var(--cell) * 0.42);
+      line-height: 1;
+      filter: drop-shadow(0 0 8px rgba(255, 213, 111, 0.45));
+    }
+
+    .box::after {
+      content: '◻';
+      font-size: calc(var(--cell) * 0.46);
+      color: #efe4ff;
+      line-height: 1;
+    }
+
     .player-token {
       position: absolute;
       inset: 0;
@@ -283,15 +302,52 @@
       place-items: center;
       z-index: 4;
       pointer-events: none;
-      font-size: 1.55rem;
+      font-size: calc(var(--cell) * 0.68);
+      line-height: 1;
     }
 
-    .player-token::after { content: '🎩'; }
-    .switch::after { content: '◉'; color: var(--accent-2); font-size: 1.2rem; }
-    .key::after { content: '🔑'; font-size: 1.2rem; }
-    .portal-a::after, .portal-b::after { content: '◌'; font-size: 1.55rem; color: var(--accent); }
-    .exit::after { content: '✿'; color: var(--good); font-size: 1.15rem; }
-    .door-closed::after { content: '▣'; color: #ffc0d1; font-size: 1.2rem; }
+    .switch::after {
+      content: '◉';
+      color: var(--accent-2);
+      font-size: calc(var(--cell) * 0.42);
+      line-height: 1;
+    }
+
+    .key::after {
+      content: '🔑';
+      font-size: calc(var(--cell) * 0.42);
+      line-height: 1;
+    }
+
+    .portal-a::after,
+    .portal-b::after {
+      content: '◌';
+      font-size: calc(var(--cell) * 0.50);
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .exit::after {
+      content: '✿';
+      color: var(--good);
+      font-size: calc(var(--cell) * 0.42);
+      line-height: 1;
+    }
+
+    .door-closed::after {
+      content: '▣';
+      color: #ffc0d1;
+      line-height: 1;
+      font-size: calc(var(--cell) * 0.42);
+    }
+
+    .door-open::after {
+      content: '▢';
+      color: var(--good);
+      line-height: 1;
+      font-size: calc(var(--cell) * 0.42);
+    }
+
     .tile .overlay {
       position: absolute;
       inset: 0;
@@ -628,88 +684,93 @@
 
     const levels = [
       {
-        name: 'Level 1 — First Sparkles',
+        name: 'Tutorial 1 | First Sparkles',
         hint: 'Collect the two stars, then walk to the exit.',
         goal: 'Collect all stars and reach the exit',
         size: { w: 9, h: 9 },
         grid: [
           '#########',
-          '#P..*...#',
-          '#..###...#',
-          '#........#',
-          '#..*..E..#',
-          '#........#',
-          '#...###..#',
-          '#........#',
+          '#...P...#',
+          '####.####',
+          '#.......#',
+          '#.*.#.*.#',
+          '#.......#',
+          '#...E...#',
+          '#.......#',
           '#########'
         ]
       },
       {
-        name: 'Level 2 — Switch & Box',
+        name: 'Tutorial 2 | Switch & Box',
         hint: 'Push the box onto the switch. That opens the door.',
         goal: 'Open the door and reach the exit',
-        size: { w: 9, h: 9 },
+        size: { w: 10, h: 10 },
         grid: [
-          '#########',
-          '#P..B...#',
-          '#..###..#',
-          '#..S.D..#',
-          '#.......#',
-          '#..*....#',
-          '#...###E#',
-          '#.......#',
-          '#########'
+          '##########',
+          '#P......##',
+          '#..#B#....#',
+          '#.......#.#',
+          '#.S.....#*#',
+          '#.......D#',
+          '#.*#####.#',
+          '####...#.#',
+          '#E...#...#',
+          '##########'
         ]
       },
       {
-        name: 'Level 3 — The Little Key',
+        name: 'Tutorial 3 | The Little Key',
         hint: 'Grab the key first, then pass the locked door.',
         goal: 'Take the key and exit',
-        size: { w: 9, h: 9 },
+        size: { w: 10, h: 10 },
         grid: [
-          '#########',
-          '#P..*...#',
-          '#.###.#..#',
-          '#...K.L..#',
+          '##########',
+          '#*......*#',
           '#..###...#',
-          '#...*....#',
-          '#..###.E.#',
-          '#........#',
-          '#########'
+          '#..LE#.K.#',
+          '#..#######',
+          '#.......*#',
+          '#....#####',
+          '#....#P..#',
+          '#*.......#',
+          '##########'
         ]
       },
       {
-        name: 'Level 4 — Portals',
+        name: 'Tutorial 4 | Portals',
         hint: 'The purple portal sends you to the yellow one. Use that to reach the exit.',
         goal: 'Use the portal and reach the exit',
         size: { w: 9, h: 9 },
         grid: [
           '#########',
-          '#P.....O#',
-          '#.###.#.#',
-          '#...*...#',
-          '#.###.#.#',
-          '#o.....E#',
-          '#..###..#',
-          '#.......#',
+          '#...P...#',
+          '#.*...*.#',
+          '#...O...#',
+          '#########',
+          '#...o...#',
+          '#.*...*.#',
+          '#...E...#',
           '#########'
         ]
       },
       {
-        name: 'Level 5 — Cozy Combo',
+        name: 'Tutorial 5 | Last Combo',
         hint: 'You need the key, a switch and a portal. Think before you move.',
         goal: 'Combine all mechanics and escape',
-        size: { w: 9, h: 9 },
+        size: { w: 12, h: 12 },
         grid: [
-          '#########',
-          '#P..B..O#',
-          '#.###.#.#',
-          '#..S.D..#',
-          '#..*K...#',
-          '#.###.#o#',
-          '#..L..E.#',
-          '#.......#',
-          '#########'
+          '############',
+          '#P....L...o#',
+          '#.....#....#',
+          '#..#..#B##.#',
+          '#*..S##.#K.#',
+          '###.###.####',
+          '#....*.....#',
+          '#........*.#',
+          '#..#########',
+          '#..D...#...#',
+          '#O.#.*...#E#',
+          '############'
         ]
       }
     ];
@@ -767,6 +828,7 @@
         boxes,
         stars,
         collectedStars: 0,
+        totalStars: (level.grid.join('').match(/\*/g) || []).length,
         hasKey,
         moves: 0,
         finished: false,
@@ -875,7 +937,8 @@
     function updateHud() {
       hudLevel.textContent = `${currentLevelIndex + 1} / ${levels.length}`;
       hudMoves.textContent = String(state.moves);
-      hudStars.textContent = `${state.collectedStars} / ${state.level.grid.join('').split('*').length}`;
+      const totalStars = (state.level.grid.join('').match(/\*/g) || []).length;
+      hudStars.textContent = `${state.collectedStars} / ${state.totalStars}`;
       hudGoal.textContent = state.level.goal;
       levelTitle.textContent = state.level.name;
     }
@@ -905,16 +968,24 @@
 
     function fitBoardToViewport() {
       if (!state) return;
+
       const { w, h } = state.level.size;
       const wrap = board.parentElement;
-      const gap = 6;
-      const padding = 14 * 2;
-      const maxWidth = Math.max(220, wrap.clientWidth || 0);
+
+      const gap = window.innerWidth <= 620 ? 4 : 6;
+      const padding = window.innerWidth <= 620 ? 20 : 28;
+      const availableWidth = Math.max(240, wrap.clientWidth || wrap.getBoundingClientRect().width || 0);
       const topOffset = wrap.getBoundingClientRect().top;
-      const usableHeight = Math.max(240, window.innerHeight - topOffset - 260);
-      const widthBased = Math.floor((maxWidth - padding - gap * (w - 1)) / w);
-      const heightBased = Math.floor((usableHeight - padding - gap * (h - 1)) / h);
-      const cell = Math.max(18, Math.min(56, widthBased, heightBased));
+      const reservedBottom = window.innerWidth <= 620 ? 165 : 230;
+      const availableHeight = Math.max(220, window.innerHeight - topOffset - reservedBottom);
+
+      const widthBased = Math.floor((availableWidth - padding - gap * (w - 1)) / w);
+      const heightBased = Math.floor((availableHeight - padding - gap * (h - 1)) / h);
+
+      const maxDim = Math.max(w, h);
+      const minCell = maxDim >= 14 ? 12 : maxDim >= 12 ? 14 : maxDim >= 10 ? 18 : 24;
+
+      const cell = Math.max(minCell, Math.min(72, widthBased, heightBased));
       board.style.setProperty('--cell', `${cell}px`);
     }
 
@@ -946,8 +1017,15 @@
           if (base === 'E') tile.classList.add('exit');
           if (base === 'S') tile.classList.add('switch');
           if (base === 'K') tile.classList.add('key');
-          if (base === 'D') tile.classList.add('door-closed');
-          if (base === 'L') tile.classList.add('door-closed');
+          if (base === 'D') {
+            if (isSwitchActive()) tile.classList.add('door-open');
+            else tile.classList.add('door-closed');
+          }
+
+          if (base === 'L') {
+            if (state.hasKey) tile.classList.add('door-open');
+            else tile.classList.add('door-closed');
+          }
           if (base === 'O') tile.classList.add('portal-a');
           if (base === 'o') tile.classList.add('portal-b');
 
@@ -962,6 +1040,7 @@
           if (state.player.x === x && state.player.y === y) {
             const player = document.createElement('span');
             player.className = 'player-token';
+            player.textContent = '🎩';
             tile.appendChild(player);
           }
 
