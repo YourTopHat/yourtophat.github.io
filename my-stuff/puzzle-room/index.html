@@ -559,7 +559,6 @@
         padding: 10px;
         border-radius: 22px;
       }
-      :root { --cell: min(11.2vw, 48px); }
       .hud { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
   </style>
@@ -976,16 +975,16 @@
       const padding = window.innerWidth <= 620 ? 20 : 28;
       const availableWidth = Math.max(240, wrap.clientWidth || wrap.getBoundingClientRect().width || 0);
       const topOffset = wrap.getBoundingClientRect().top;
-      const reservedBottom = window.innerWidth <= 620 ? 165 : 230;
+      const reservedBottom = window.innerWidth <= 620 ? 140 : 210;
       const availableHeight = Math.max(220, window.innerHeight - topOffset - reservedBottom);
 
       const widthBased = Math.floor((availableWidth - padding - gap * (w - 1)) / w);
       const heightBased = Math.floor((availableHeight - padding - gap * (h - 1)) / h);
 
       const maxDim = Math.max(w, h);
-      const minCell = maxDim >= 14 ? 12 : maxDim >= 12 ? 14 : maxDim >= 10 ? 18 : 24;
+      const minCell = maxDim >= 14 ? 14 : maxDim >= 12 ? 16 : maxDim >= 10 ? 20 : 26;
 
-      const cell = Math.max(minCell, Math.min(72, widthBased, heightBased));
+      const cell = Math.max(minCell, Math.min(80, widthBased, heightBased));
       board.style.setProperty('--cell', `${cell}px`);
     }
 
