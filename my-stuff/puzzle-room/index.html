@@ -230,7 +230,7 @@
       display: grid;
       grid-template-columns: repeat(9, var(--cell));
       grid-template-rows: repeat(9, var(--cell));
-      gap: 6px;
+      gap: 3px;
       padding: 14px;
       border-radius: 28px;
       background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
@@ -296,11 +296,12 @@
     .player-token {
       position: absolute;
       inset: 0;
-      display: grid;
-      place-items: center;
-      z-index: 4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
       pointer-events: none;
-      font-size: calc(var(--cell) * 0.62);
+      font-size: calc(var(--cell) * 0.68);
       line-height: 1;
     }
 
@@ -354,7 +355,6 @@
       font-size: 1.55rem;
     }
 
-    .player-token::after { content: '🎩'; }
     .tile .overlay {
       position: absolute;
       inset: 0;
@@ -984,7 +984,7 @@
       const usableHeight = Math.max(240, window.innerHeight - topOffset - 260);
       const widthBased = Math.floor((maxWidth - padding - gap * (w - 1)) / w);
       const heightBased = Math.floor((usableHeight - padding - gap * (h - 1)) / h);
-      const cell = Math.max(18, Math.min(56, widthBased, heightBased));
+      const cell = Math.max(30, Math.min(72, widthBased, heightBased));
       board.style.setProperty('--cell', `${cell}px`);
     }
 
@@ -1039,6 +1039,7 @@
           if (state.player.x === x && state.player.y === y) {
             const player = document.createElement('span');
             player.className = 'player-token';
+            player.textContent = '🎩';
             tile.appendChild(player);
           }
 
