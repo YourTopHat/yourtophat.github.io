@@ -265,6 +265,23 @@
       border: 1px solid rgba(180, 240, 255, 0.4);
     }
 
+    .tile.lava {
+      background: linear-gradient(
+        180deg,
+        rgba(255, 162, 40, 0.555),
+        rgba(255, 124, 17, 0.415)
+      );
+      border: 1px solid rgba(180, 240, 255, 0.4);
+    }
+
+    .tile.lava .overlay {
+      background: radial-gradient(
+        circle at 40% 30%,
+        rgba(255,255,255,0.35),
+        transparent 60%
+      );
+    }
+
     .tile.ice::after {
       content: '❄';
       font-size: calc(var(--cell) * 0.35);
