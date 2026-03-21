@@ -1134,77 +1134,86 @@
 
     function move(dx, dy) {
       if (state.finished) return;
-      const nx = state.player.x + dx;
-      const ny = state.player.y + dy;
-      const target = getTile(nx, ny);
-      const box = boxAt(nx, ny);
 
-      if (target === '#') {
-        beep('fail');
-        setStatus('A wall is in the way.', 'bad');
-        return;
-      }
+      const attemptStep = (stepDx, stepDy, countMove = false) => {
+        const nx = state.player.x + stepDx;
+        const ny = state.player.y + stepDy;
+        const target = getTile(nx, ny);
+        const box = boxAt(nx, ny);
 
-      if (handleHazards()) {
+        if (target === '#') {
+          beep('fail');
+          setStatus('A wall is in the way.', 'bad');
+          return { moved: false, reset: false };
+        }
+
+        if (target === 'D' && !isSwitchActive()) {
+          beep('fail');
+          setStatus('The door is still closed. Put a box on the switch.', 'bad');
+          return { moved: false, reset: false };
+        }
+
+        if (target === 'L' && !state.hasKey) {
+          beep('fail');
+          setStatus('You need the key first.', 'bad');
+          return { moved: false, reset: false };
+        }
+
+        if (box) {
+          const bx = nx + stepDx;
+          const by = ny + stepDy;
+          const beyond = getTile(bx, by);
+
+          if (!inBounds(bx, by) || !tilePassable(bx, by, true) || boxAt(bx, by)) {
+            beep('fail');
+            setStatus('The box cannot move there.', 'bad');
+            return { moved: false, reset: false };
+          }
+
+          if (beyond === 'D' && !isSwitchActive()) {
+            beep('fail');
+            setStatus('The box cannot push through a closed door.', 'bad');
+            return { moved: false, reset: false };
+          }
+
+          if (beyond === 'L' && !state.hasKey) {
+            beep('fail');
+            setStatus('The locked door needs the key first.', 'bad');
+            return { moved: false, reset: false };
+          }
+
+          box.x = bx;
+          box.y = by;
+        }
+
+        state.player.x = nx;
+        state.player.y = ny;
+
+        if (countMove) state.moves += 1;
+        beep('move');
+
+        collectStarAtPlayer();
+        pickUpKey();
+        handlePortals();
+
+        if (handleHazards()) {
+          return { moved: true, reset: true };
+        }
+
+        return { moved: true, reset: false };
+      };
+
+      const first = attemptStep(dx, dy, true);
+      if (!first.moved || first.reset) {
         draw();
         return;
       }
 
-      if (target === 'D' && !isSwitchActive()) {
-        beep('fail');
-        setStatus('The door is still closed. Put a box on the switch.', 'bad');
-        return;
-      }
-
-      if (target === 'L' && !state.hasKey) {
-        beep('fail');
-        setStatus('You need the key first.', 'bad');
-        return;
-      }
-
-      if (box) {
-        const bx = nx + dx;
-        const by = ny + dy;
-        const beyond = getTile(bx, by);
-        if (!tilePassable(bx, by, true) || boxAt(bx, by)) {
-          beep('fail');
-          setStatus('The box cannot move there.', 'bad');
-          return;
-        }
-        if (beyond === 'D' && !isSwitchActive()) {
-          beep('fail');
-          setStatus('The box cannot push through a closed door.', 'bad');
-          return;
-        }
-        if (beyond === 'L' && !state.hasKey) {
-          beep('fail');
-          setStatus('The locked door needs the key first.', 'bad');
-          return;
-        }
-
-        box.x = bx;
-        box.y = by;
-      }
-
-      let step = tryStep(dx, dy, true);
-      if (!step.moved || step.reset) {
-        draw();
-        return;
-      }
-
-      while (isIce(state.player.x, state.player.y)) {
-        const next = tryStep(dx, dy, false);
+      while (getTile(state.player.x, state.player.y) === 'I') {
+        const next = attemptStep(dx, dy, false);
         if (!next.moved || next.reset) break;
       }
 
-      state.player.x = nx;
-      state.player.y = ny;
-      state.moves += 1;
-      beep('move');
-
-      collectStarAtPlayer();
-      pickUpKey();
-      handlePortals();
       draw();
       checkWin();
     }
