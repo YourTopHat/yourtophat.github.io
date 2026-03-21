@@ -923,18 +923,26 @@
     let currentLevelIndex = 0;
 
     function normalizeGrid(level) {
-      const width = level.size.w;
-      const height = level.size.h;
-      const rows = [];
-      for (let y = 0; y < height; y++) {
-        const raw = level.grid[y] ?? '';
-        rows.push(raw.padEnd(width, '#').slice(0, width).split(''));
-      }
-      return rows;
+      const rawRows = level.grid.map(row => row.split(''));
+      const declaredW = level.size?.w ?? 0;
+      const declaredH = level.size?.h ?? 0;
+
+      const width = Math.max(declaredW, ...rawRows.map(r => r.length));
+      const height = Math.max(declaredH, rawRows.length);
+
+      return Array.from({ length: height }, (_, y) => {
+        const row = rawRows[y] ? rawRows[y].slice() : [];
+        while (row.length < width) row.push('#');
+        return row.slice(0, width);
+      });
     }
 
     function cloneLevel(level) {
       const grid = normalizeGrid(level);
+      const size = {
+        w: grid[0].length,
+        h: grid.length
+      };
       let player = { x: 0, y: 0 };
       let stars = [];
       let boxes = [];
@@ -961,6 +969,7 @@
       return {
         level,
         grid,
+        size,
         player,
         boxes,
         stars,
@@ -1179,7 +1188,7 @@
 
     function fitBoardToViewport() {
       if (!state) return;
-      const { w, h } = state.level.size;
+      const { w, h } = state.size;
       const wrap = board.parentElement;
       const gap = window.innerWidth <= 620 ? 3 : 4;
       const padding = window.innerWidth <= 620 ? 20 : 24;
@@ -1210,7 +1219,7 @@
     function draw() {
       refreshHazards();
       board.innerHTML = '';
-      const { w, h } = state.level.size;
+      const { w, h } = state.size;
       board.style.gridTemplateColumns = `repeat(${w}, var(--cell))`;
       board.style.gridTemplateRows = `repeat(${h}, var(--cell))`;
 
