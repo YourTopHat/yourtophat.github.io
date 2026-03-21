@@ -1276,6 +1276,7 @@
         handlePortals();
 
         if (handleHazards()) {
+          draw();
           return { moved: true, reset: true };
         }
 
@@ -1364,6 +1365,11 @@
       state.hazards = computeHazards();
     }
 
+    function resetCurrentLevel(message = '') {
+      loadLevel(currentLevelIndex);
+      if (message) setStatus(message, 'bad');
+    }
+
     function handleHazards() {
       refreshHazards();
 
@@ -1376,12 +1382,10 @@
         state.hazards.beams.has(here);
 
       if (onDanger) {
-        const message =
-          tile === '~'
-            ? 'You touched the lava. Level reset.'
-            : 'Hazard hit you. Level reset.';
-
-        resetCurrentLevel(message);
+        resetCurrentLevel(tile === '~'
+          ? 'You touched the lava. Level reset.'
+          : 'Hazard hit you. Level reset.'
+        );
         return true;
       }
 
