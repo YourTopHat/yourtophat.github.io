@@ -1240,7 +1240,7 @@
           if (state.player.x === x && state.player.y === y) tile.classList.add('has-player');
           if (state.hazards.beams.has(`${x},${y}`)) tile.classList.add('laser-beam');
           if (state.turretShots.some(s => s.x === x && s.y === y)) {
-            tile.classList.add('beam');
+            tile.classList.add('laser-beam');
           }
 
           const overlay = document.createElement('div');
