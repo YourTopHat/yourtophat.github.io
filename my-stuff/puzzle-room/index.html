@@ -401,6 +401,34 @@
       line-height: 1;
     }
 
+        /* Torreta */
+    .tile.turret {
+      background: linear-gradient(180deg, #ff8a8a, #ff4d4d);
+      border: 1px solid rgba(255, 120, 120, 0.6);
+    }
+
+    .tile.turret::after {
+      content: '✹';
+      font-size: calc(var(--cell) * 0.45);
+    }
+
+    /* Emisores direccionales */
+    .tile.laser-up::after { content: '↑'; }
+    .tile.laser-down::after { content: '↓'; }
+    .tile.laser-left::after { content: '←'; }
+    .tile.laser-right::after { content: '→'; }
+
+    /* Rayos */
+    .tile.laser-beam {
+      background: linear-gradient(
+        90deg,
+        rgba(255, 80, 80, 0.2),
+        rgba(255, 0, 0, 0.45),
+        rgba(255, 80, 80, 0.2)
+      );
+      box-shadow: 0 0 8px rgba(255, 0, 0, 0.6);
+    }
+
     .exit::after {
       content: '✿';
       color: var(--good);
