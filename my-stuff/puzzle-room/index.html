@@ -1019,7 +1019,9 @@
         world: level.world || 'main',
         sliding: false,
         slideDir: null,
-        hazards: { danger: new Set(), beams: new Set() }
+        hazards: { danger: new Set(), beams: new Set() },
+        turretShots: [],
+        lastTurretShotAt: 0,
       };
     }
 
@@ -1187,6 +1189,7 @@
     function loadLevel(index) {
       currentLevelIndex = index;
       state = cloneLevel(levels[index]);
+      startTurretLoop();
       state.unlockedLevel = loadProgress();
       renderLevelButtons();
       updateHud();
@@ -1236,6 +1239,9 @@
           if (boxAt(x, y)) tile.classList.add('box');
           if (state.player.x === x && state.player.y === y) tile.classList.add('has-player');
           if (state.hazards.beams.has(`${x},${y}`)) tile.classList.add('laser-beam');
+          if (state.turretShots.some(s => s.x === x && s.y === y)) {
+            tile.classList.add('beam');
+          }
 
           const overlay = document.createElement('div');
           overlay.className = 'overlay';
@@ -1387,13 +1393,6 @@
         for (let x = 0; x < state.grid[y].length; x++) {
           const cell = state.grid[y][x];
 
-          if (cell === 'T') {
-            danger.add(`${x},${y}`);
-            castRay(x, y, 1, 0);
-            castRay(x, y, -1, 0);
-            castRay(x, y, 0, 1);
-            castRay(x, y, 0, -1);
-          }
 
           if (cell === '^') { danger.add(`${x},${y}`); castRay(x, y, 0, -1); }
           if (cell === 'v') { danger.add(`${x},${y}`); castRay(x, y, 0, 1); }
@@ -1409,8 +1408,79 @@
       return { danger, beams };
     }
 
+    function blocksBeam(x, y) {
+      const t = getTile(x, y);
+      return t === '#' || (t === 'D' && !isSwitchActive()) || (t === 'L' && !state.hasKey) || boxAt(x, y);
+    }
+
     function refreshHazards() {
       state.hazards = computeHazards();
+    }
+
+    function getTurrets() {
+      const turrets = [];
+      for (let y = 0; y < state.grid.length; y++) {
+        for (let x = 0; x < state.grid[y].length; x++) {
+          if (state.grid[y][x] === 'T') {
+            turrets.push({ x, y });
+          }
+        }
+      }
+      return turrets;
+    }
+
+    function spawnTurretShots() {
+      const turrets = getTurrets();
+      for (const t of turrets) {
+        state.turretShots.push(
+          { x: t.x, y: t.y, dx: 1, dy: 0, alive: true },
+          { x: t.x, y: t.y, dx: -1, dy: 0, alive: true },
+          { x: t.x, y: t.y, dx: 0, dy: 1, alive: true },
+          { x: t.x, y: t.y, dx: 0, dy: -1, alive: true }
+        );
+      }
+    }
+
+    function advanceTurretShots() {
+      for (const shot of state.turretShots) {
+        if (!shot.alive) continue;
+
+        const nx = shot.x + shot.dx;
+        const ny = shot.y + shot.dy;
+
+        if (!inBounds(nx, ny) || blocksBeam(nx, ny)) {
+          shot.alive = false;
+          continue;
+        }
+
+        shot.x = nx;
+        shot.y = ny;
+
+        if (state.player.x === nx && state.player.y === ny) {
+          resetCurrentLevel('Hit by turret beam.');
+          return true;
+        }
+      }
+
+      state.turretShots = state.turretShots.filter(s => s.alive);
+      return false;
+    }
+
+    function tickTurrets() {
+      const now = performance.now();
+
+      if (!state.lastTurretShotAt) state.lastTurretShotAt = now;
+
+      if (now - state.lastTurretShotAt >= 2000) {
+        spawnTurretShots();
+        state.lastTurretShotAt = now;
+      }
+
+      if (advanceTurretShots()) {
+        return true;
+      }
+
+      return false;
     }
 
     function resetCurrentLevel(message = '') {
@@ -1460,6 +1530,21 @@
           beep('move');
         }
       }
+    }
+
+    let turretLoop = null;
+
+    function startTurretLoop() {
+      if (turretLoop) clearInterval(turretLoop);
+
+      turretLoop = setInterval(() => {
+        if (!state || state.finished) return;
+        if (tickTurrets()) {
+          draw();
+          return;
+        }
+        draw();
+      }, 100);
     }
 
     function checkWin() {
