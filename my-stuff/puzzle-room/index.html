@@ -1163,25 +1163,21 @@
           const bx = nx + dx;
           const by = ny + dy;
           const beyond = getTile(bx, by);
-
-          if (!inBounds(bx, by) || !tilePassable(bx, by, true) || boxAt(bx, by)) {
+          if (!tilePassable(bx, by, true) || boxAt(bx, by)) {
             beep('fail');
             setStatus('The box cannot move there.', 'bad');
-            return { moved: false, reset: false };
+            return;
           }
-
           if (beyond === 'D' && !isSwitchActive()) {
             beep('fail');
             setStatus('The box cannot push through a closed door.', 'bad');
-            return { moved: false, reset: false };
+            return;
           }
-
           if (beyond === 'L' && !state.hasKey) {
             beep('fail');
             setStatus('The locked door needs the key first.', 'bad');
-            return { moved: false, reset: false };
+            return;
           }
-
           box.x = bx;
           box.y = by;
         }
@@ -1245,7 +1241,7 @@
         let x = sx + dx;
         let y = sy + dy;
 
-        while (inBounds(x, y)) {
+        while (tilePassable(x, y)) {
           const t = getTile(x, y);
           if (t === '#' || (t === 'D' && !isSwitchActive()) || (t === 'L' && !state.hasKey) || boxAt(x, y)) break;
           danger.add(`${x},${y}`);
