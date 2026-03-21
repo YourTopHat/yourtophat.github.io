@@ -1135,9 +1135,9 @@
     function move(dx, dy) {
       if (state.finished) return;
 
-      const attemptStep = (stepDx, stepDy, countMove = false) => {
-        const nx = state.player.x + stepDx;
-        const ny = state.player.y + stepDy;
+      const step = (countMove = false) => {
+        const nx = state.player.x + dx;
+        const ny = state.player.y + dy;
         const target = getTile(nx, ny);
         const box = boxAt(nx, ny);
 
@@ -1160,8 +1160,8 @@
         }
 
         if (box) {
-          const bx = nx + stepDx;
-          const by = ny + stepDy;
+          const bx = nx + dx;
+          const by = ny + dy;
           const beyond = getTile(bx, by);
 
           if (!inBounds(bx, by) || !tilePassable(bx, by, true) || boxAt(bx, by)) {
@@ -1190,8 +1190,8 @@
         state.player.y = ny;
 
         if (countMove) state.moves += 1;
-        beep('move');
 
+        beep('move');
         collectStarAtPlayer();
         pickUpKey();
         handlePortals();
@@ -1203,14 +1203,14 @@
         return { moved: true, reset: false };
       };
 
-      const first = attemptStep(dx, dy, true);
+      const first = step(true);
       if (!first.moved || first.reset) {
         draw();
         return;
       }
 
       while (getTile(state.player.x, state.player.y) === 'I') {
-        const next = attemptStep(dx, dy, false);
+        const next = step(false);
         if (!next.moved || next.reset) break;
       }
 
