@@ -21,15 +21,6 @@
       --shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
       --cell: 48px;
       --radius: 24px;
-      --board-bg: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-      --board-border: var(--border);
-      --board-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
-      --floor-bg: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-      --wall-bg: linear-gradient(180deg, #4b3b64, #392b4f);
-      --ice-bg: linear-gradient(180deg, rgba(220,245,255,0.65), rgba(164,220,255,0.28));
-      --lava-bg: linear-gradient(180deg, rgba(255,193,118,0.78), rgba(174,71,22,0.88));
-      --turret-bg: linear-gradient(180deg, rgba(117, 117, 130, 0.92), rgba(63, 63, 74, 0.98));
-      --laser-bg: linear-gradient(180deg, rgba(255, 116, 116, 0.78), rgba(171, 26, 26, 0.95));
       font-family: 'Nunito', system-ui, sans-serif;
     }
 
@@ -46,34 +37,6 @@
       --good: #2f9b68;
       --bad: #d65c7d;
       --shadow: 0 20px 50px rgba(124, 75, 214, 0.13);
-    }
-
-    body.world-main {
-      --board-bg: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-      --board-border: rgba(255,255,255,0.10);
-      --floor-bg: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-      --wall-bg: linear-gradient(180deg, #4b3b64, #392b4f);
-    }
-
-    body.world-ice {
-      --board-bg: linear-gradient(180deg, rgba(164, 225, 255, 0.18), rgba(111, 175, 236, 0.10));
-      --board-border: rgba(165, 225, 255, 0.24);
-      --floor-bg: linear-gradient(180deg, rgba(210, 242, 255, 0.30), rgba(171, 223, 255, 0.12));
-      --wall-bg: linear-gradient(180deg, #2c5f87, #213b56);
-    }
-
-    body.world-volcano {
-      --board-bg: linear-gradient(180deg, rgba(255, 202, 145, 0.16), rgba(194, 101, 40, 0.10));
-      --board-border: rgba(255, 195, 125, 0.22);
-      --floor-bg: linear-gradient(180deg, rgba(248, 207, 157, 0.18), rgba(180, 89, 28, 0.10));
-      --wall-bg: linear-gradient(180deg, #7c4227, #4f2816);
-    }
-
-    body.world-factory {
-      --board-bg: linear-gradient(180deg, rgba(204, 207, 214, 0.18), rgba(121, 126, 137, 0.10));
-      --board-border: rgba(204, 207, 214, 0.24);
-      --floor-bg: linear-gradient(180deg, rgba(226, 229, 235, 0.16), rgba(157, 162, 173, 0.10));
-      --wall-bg: linear-gradient(180deg, #70767f, #454a54);
     }
 
     * { box-sizing: border-box; }
@@ -195,7 +158,9 @@
       backdrop-filter: blur(10px);
     }
 
-    .game-panel { padding: 18px; }
+    .game-panel {
+      padding: 18px;
+    }
 
     .game-header {
       display: flex;
@@ -264,12 +229,14 @@
 
     .board {
       display: grid;
+      grid-template-columns: repeat(9, var(--cell));
+      grid-template-rows: repeat(9, var(--cell));
       gap: 4px;
       padding: 12px;
       border-radius: 28px;
-      background: var(--board-bg);
-      border: 1px solid var(--board-border);
-      box-shadow: var(--board-shadow);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border: 1px solid var(--border);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
       width: max-content;
       max-width: none;
       margin: 0 auto;
@@ -289,10 +256,46 @@
       user-select: none;
     }
 
-    .tile.has-player { z-index: 3; }
+    .tile.has-player {
+      z-index: 3;
+    }
 
-    .floor { background: var(--floor-bg); }
-    .wall { background: var(--wall-bg); }
+    body.world-main {
+      --board-bg: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      --wall-bg: linear-gradient(180deg, #4b3b64, #392b4f);
+      --floor-bg: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+    }
+
+    body.world-ice {
+      --board-bg: linear-gradient(180deg, rgba(164, 225, 255, 0.18), rgba(111, 175, 236, 0.10));
+      --wall-bg: linear-gradient(180deg, #2c5f87, #213b56);
+      --floor-bg: linear-gradient(180deg, rgba(210, 242, 255, 0.30), rgba(171, 223, 255, 0.12));
+    }
+
+    body.world-volcano {
+      --board-bg: linear-gradient(180deg, rgba(255, 202, 145, 0.16), rgba(194, 101, 40, 0.10));
+      --wall-bg: linear-gradient(180deg, #7c4227, #4f2816);
+      --floor-bg: linear-gradient(180deg, rgba(248, 207, 157, 0.18), rgba(180, 89, 28, 0.10));
+    }
+
+    body.world-factory {
+      --board-bg: linear-gradient(180deg, rgba(204, 207, 214, 0.18), rgba(121, 126, 137, 0.10));
+      --wall-bg: linear-gradient(180deg, #70767f, #454a54);
+      --floor-bg: linear-gradient(180deg, rgba(226, 229, 235, 0.16), rgba(157, 162, 173, 0.10));
+    }
+
+    .board {
+      background: var(--board-bg);
+    }
+
+    .floor {
+      background: var(--floor-bg);
+    }
+
+    .wall {
+      background: var(--wall-bg);
+    }
+
     .exit {
       background: linear-gradient(180deg, rgba(137, 230, 179, 0.18), rgba(137, 230, 179, 0.08));
       border: 1px solid rgba(137, 230, 179, 0.22);
@@ -300,10 +303,6 @@
     .door-closed {
       background: linear-gradient(180deg, rgba(255, 143, 176, 0.20), rgba(255, 143, 176, 0.08));
       border: 1px solid rgba(255, 143, 176, 0.24);
-    }
-    .door-open {
-      background: linear-gradient(180deg, rgba(137, 230, 179, 0.18), rgba(137, 230, 179, 0.08));
-      border: 1px solid rgba(137, 230, 179, 0.22);
     }
     .switch {
       background: linear-gradient(180deg, rgba(255, 213, 111, 0.18), rgba(255, 213, 111, 0.08));
@@ -315,31 +314,6 @@
     }
     .portal-a { background: linear-gradient(180deg, rgba(180, 135, 255, 0.18), rgba(255, 213, 111, 0.08)); }
     .portal-b { background: linear-gradient(180deg, rgba(255, 213, 111, 0.18), rgba(180, 135, 255, 0.08)); }
-    .ice {
-      background: var(--ice-bg);
-      border: 1px solid rgba(225, 247, 255, 0.28);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
-    }
-    .lava {
-      background: var(--lava-bg);
-      border: 1px solid rgba(255, 210, 150, 0.22);
-    }
-    .turret {
-      background: var(--turret-bg);
-      border: 1px solid rgba(255, 120, 120, 0.24);
-    }
-    .laser-emitter {
-      background: var(--laser-bg);
-      border: 1px solid rgba(255, 120, 120, 0.24);
-    }
-    .laser-beam {
-      background: linear-gradient(180deg, rgba(255, 112, 112, 0.22), rgba(255, 26, 26, 0.12));
-      box-shadow: inset 0 0 0 1px rgba(255, 102, 102, 0.14);
-    }
-    .factory-beam {
-      background: linear-gradient(180deg, rgba(255, 84, 84, 0.24), rgba(255, 15, 15, 0.10));
-      box-shadow: inset 0 0 0 1px rgba(255, 102, 102, 0.16);
-    }
     .star::after {
       content: '✦';
       color: var(--accent-2);
@@ -347,34 +321,38 @@
       line-height: 1;
       filter: drop-shadow(0 0 8px rgba(255, 213, 111, 0.45));
     }
+
     .box::after {
       content: '◻';
       font-size: calc(var(--cell) * 0.46);
       color: #efe4ff;
       line-height: 1;
     }
+
     .player-token {
       position: absolute;
       inset: 0;
       display: grid;
       place-items: center;
-      z-index: 5;
+      z-index: 4;
       pointer-events: none;
       font-size: calc(var(--cell) * 0.68);
       line-height: 1;
     }
-    .player-token::after { content: '🎩'; }
+
     .switch::after {
       content: '◉';
       color: var(--accent-2);
       font-size: calc(var(--cell) * 0.42);
       line-height: 1;
     }
+
     .key::after {
       content: '🔑';
       font-size: calc(var(--cell) * 0.42);
       line-height: 1;
     }
+
     .portal-a::after,
     .portal-b::after {
       content: '◌';
@@ -382,47 +360,28 @@
       color: var(--accent);
       line-height: 1;
     }
+
     .exit::after {
       content: '✿';
       color: var(--good);
       font-size: calc(var(--cell) * 0.42);
       line-height: 1;
     }
-    .door-closed::after,
+
+    .door-closed::after {
+      content: '▣';
+      color: #ffc0d1;
+      line-height: 1;
+      font-size: calc(var(--cell) * 0.42);
+    }
+
     .door-open::after {
+      content: '▢';
+      color: var(--good);
+      line-height: 1;
       font-size: calc(var(--cell) * 0.42);
-      line-height: 1;
     }
-    .door-closed::after { content: '▣'; color: #ffc0d1; }
-    .door-open::after { content: '▢'; color: var(--good); }
-    .ice::after {
-      content: '❄';
-      color: #effbff;
-      font-size: calc(var(--cell) * 0.42);
-      line-height: 1;
-      filter: drop-shadow(0 0 6px rgba(220, 245, 255, 0.7));
-    }
-    .lava::after {
-      content: '◈';
-      color: #fff1d1;
-      font-size: calc(var(--cell) * 0.36);
-      line-height: 1;
-    }
-    .turret::after {
-      content: '◎';
-      color: #ff8b8b;
-      font-size: calc(var(--cell) * 0.44);
-      line-height: 1;
-    }
-    .laser-emitter::after {
-      color: #ffd0d0;
-      font-size: calc(var(--cell) * 0.42);
-      line-height: 1;
-    }
-    .laser-up::after { content: '↑'; }
-    .laser-down::after { content: '↓'; }
-    .laser-left::after { content: '←'; }
-    .laser-right::after { content: '→'; }
+
     .tile .overlay {
       position: absolute;
       inset: 0;
@@ -604,20 +563,36 @@
       animation: float 6s ease-in-out infinite;
     }
 
-    @keyframes float { 50% { transform: translateY(12px); } }
-    @keyframes pop { 0% { transform: scale(0.94); } 100% { transform: scale(1); } }
+    @keyframes float {
+      50% { transform: translateY(12px); }
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.94); }
+      100% { transform: scale(1); }
+    }
+
     .pop-in { animation: pop .18s ease; }
 
     @media (max-width: 980px) {
-      .layout { grid-template-columns: 1fr; }
-      .sidebar { position: static; }
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
     }
 
     @media (max-width: 620px) {
       body { padding: 14px; }
       .game-panel { padding: 14px; }
       .panel, .side-card { border-radius: 22px; }
-      .board { gap: 3px; padding: 10px; border-radius: 22px; }
+      .board {
+        gap: 4px;
+        padding: 10px;
+        border-radius: 22px;
+      }
       .hud { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
   </style>
@@ -740,13 +715,6 @@
       progress: 'yourtophat:puzzle-progress'
     };
 
-    const WORLD_NAMES = {
-      main: 'Main',
-      ice: 'Ice',
-      volcano: 'Volcano',
-      factory: 'Factory'
-    };
-
     const levels = [
       {
         name: 'Tutorial 1 | First Sparkles',
@@ -844,62 +812,24 @@
         ]
       },
       {
-        name: 'Ice World 1 | Slidey Sparkles',
+        name: 'Ice Tutorial | Icy Floor',
         world: 'ice',
-        hint: 'Step onto ice and keep the direction. Chain ice tiles will carry you.',
-        goal: 'Slide safely and reach the exit',
+        hint: 'The ice makes you slip!',
+        goal: 'Think about your next step',
         size: { w: 9, h: 9 },
         grid: [
           '#########',
-          '#P.I..E##',
-          '#..III..#',
-          '#..*....#',
-          '#..I.I..#',
-          '#..I*I..#',
-          '#..III..#',
-          '#.......#',
+          '#P.IIII.#',
+          '#######I#',
+          '#.#.II.I#',
+          '#I.I..II#',
+          '#I.I..II#',
+          '#.IIII..#',
+          '##...E###',
           '#########'
         ]
       },
-      {
-        name: 'Volcano World 1 | Warm Path',
-        world: 'volcano',
-        hint: 'Lava is instant trouble. Find the safe route across the warm room.',
-        goal: 'Avoid lava and reach the exit',
-        size: { w: 9, h: 9 },
-        grid: [
-          '#########',
-          '#P..*..E#',
-          '#..~~~..#',
-          '#..#.#..#',
-          '#..~.~..#',
-          '#..#.#..#',
-          '#..~~~..#',
-          '#.......#',
-          '#########'
-        ]
-      },
-      {
-        name: 'Factory World 1 | Warning Lights',
-        world: 'factory',
-        hint: 'Lasers and turrets reset you instantly. Use the box to block the beam.',
-        goal: 'Block the beams and reach the exit',
-        size: { w: 9, h: 9 },
-        grid: [
-          '#########',
-          '#P..B..E#',
-          '#..v....#',
-          '#..#.#..#',
-          '#..T....#',
-          '#..#.^..#',
-          '#..#....#',
-          '#...*...#',
-          '#########'
-        ]
-      }
     ];
-
-    const WORLD_CLASS_LIST = ['world-main', 'world-ice', 'world-volcano', 'world-factory'];
 
     const board = document.getElementById('board');
     const levelList = document.getElementById('levelList');
@@ -922,27 +852,8 @@
     let state = null;
     let currentLevelIndex = 0;
 
-    function normalizeGrid(level) {
-      const rawRows = level.grid.map(row => row.split(''));
-      const declaredW = level.size?.w ?? 0;
-      const declaredH = level.size?.h ?? 0;
-
-      const width = Math.max(declaredW, ...rawRows.map(r => r.length));
-      const height = Math.max(declaredH, rawRows.length);
-
-      return Array.from({ length: height }, (_, y) => {
-        const row = rawRows[y] ? rawRows[y].slice() : [];
-        while (row.length < width) row.push('#');
-        return row.slice(0, width);
-      });
-    }
-
     function cloneLevel(level) {
-      const grid = normalizeGrid(level);
-      const size = {
-        w: grid[0].length,
-        h: grid.length
-      };
+      const grid = level.grid.map(row => row.split(''));
       let player = { x: 0, y: 0 };
       let stars = [];
       let boxes = [];
@@ -969,7 +880,6 @@
       return {
         level,
         grid,
-        size,
         player,
         boxes,
         stars,
@@ -981,6 +891,8 @@
         unlockedLevel: loadProgress(),
         portals: findPortals(grid),
         world: level.world || 'main',
+        sliding: false,
+        slideDir: null,
         hazards: { danger: new Set(), beams: new Set() }
       };
     }
@@ -1009,12 +921,6 @@
       toggleThemeTop.textContent = theme === 'dark' ? '🌙 Night' : '☀️ Day';
     }
 
-    function applyWorldTheme(world) {
-      document.body.classList.remove(...WORLD_CLASS_LIST);
-      document.body.classList.add(`world-${world}`);
-      stateChip.textContent = `${WORLD_NAMES[world] || 'Main'} World`;
-    }
-
     function beep(type = 'move') {
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1032,6 +938,10 @@
         // silent fail
       }
     }
+    
+    function isIce(x, y) {
+      return getTile(x, y) === 'I';
+    }
 
     function findPortals(grid) {
       const portals = { A: [], B: [] };
@@ -1044,16 +954,9 @@
       return portals;
     }
 
-    function keyOf(x, y) {
-      return `${x},${y}`;
-    }
-
-    function inBounds(x, y) {
-      return y >= 0 && y < state.grid.length && x >= 0 && x < state.grid[y].length;
-    }
-
     function getTile(x, y) {
-      if (!state || !inBounds(x, y)) return '#';
+      if (y < 0 || y >= state.grid.length) return '#';
+      if (x < 0 || x >= state.grid[y].length) return '#';
       return state.grid[y][x];
     }
 
@@ -1069,80 +972,26 @@
       return state.stars.find(s => s.x === x && s.y === y);
     }
 
-    function isClosedDoorAt(x, y) {
+    function tilePassable(x, y, movingBox = false) {
       const t = getTile(x, y);
-      if (t === 'D') return !isSwitchActive();
-      if (t === 'L') return !state.hasKey;
-      return false;
+      if (t === '#') return false;
+      if (t === 'D') return isSwitchActive();
+      if (t === 'L') return state.hasKey;
+      if (t === 'B' || t === 'P') return false;
+      const b = boxAt(x, y);
+      if (b) return false;
+      if (movingBox && (t === 'E' || t === 'K' || t === 'S' || t === 'O' || t === 'o')) return true;
+      return true;
     }
 
-    function blocksRay(x, y) {
-      const t = getTile(x, y);
-      if (t === '#') return true;
-      if (t === 'D' && !isSwitchActive()) return true;
-      if (t === 'L' && !state.hasKey) return true;
-      if (boxAt(x, y)) return true;
-      return false;
-    }
-
-    function computeHazards() {
-      const danger = new Set();
-      const beams = new Set();
-
-      const castRay = (sx, sy, dx, dy) => {
-        let x = sx + dx;
-        let y = sy + dy;
-        while (inBounds(x, y)) {
-          if (blocksRay(x, y)) break;
-          danger.add(keyOf(x, y));
-          beams.add(keyOf(x, y));
-          x += dx;
-          y += dy;
-        }
-      };
-
+    function isSwitchActive() {
+      const switches = [];
       for (let y = 0; y < state.grid.length; y++) {
         for (let x = 0; x < state.grid[y].length; x++) {
-          const cell = state.grid[y][x];
-          if (cell === 'T') {
-            danger.add(keyOf(x, y));
-            castRay(x, y, 1, 0);
-            castRay(x, y, -1, 0);
-            castRay(x, y, 0, 1);
-            castRay(x, y, 0, -1);
-          }
-          if (cell === '^') {
-            danger.add(keyOf(x, y));
-            castRay(x, y, 0, -1);
-          }
-          if (cell === 'v') {
-            danger.add(keyOf(x, y));
-            castRay(x, y, 0, 1);
-          }
-          if (cell === '<') {
-            danger.add(keyOf(x, y));
-            castRay(x, y, -1, 0);
-          }
-          if (cell === '>') {
-            danger.add(keyOf(x, y));
-            castRay(x, y, 1, 0);
-          }
-          if (cell === '~') {
-            danger.add(keyOf(x, y));
-          }
+          if (state.grid[y][x] === 'S') switches.push({ x, y });
         }
       }
-
-      return { danger, beams };
-    }
-
-    function refreshHazards() {
-      state.hazards = computeHazards();
-    }
-
-    function isHazardCell(x, y) {
-      refreshHazards();
-      return state.hazards.danger.has(keyOf(x, y));
+      return switches.some(s => boxAt(s.x, s.y));
     }
 
     function remainingStars() {
@@ -1152,6 +1001,7 @@
     function updateHud() {
       hudLevel.textContent = `${currentLevelIndex + 1} / ${levels.length}`;
       hudMoves.textContent = String(state.moves);
+      const totalStars = (state.level.grid.join('').match(/\*/g) || []).length;
       hudStars.textContent = `${state.collectedStars} / ${state.totalStars}`;
       hudGoal.textContent = state.level.goal;
       levelTitle.textContent = state.level.name;
@@ -1162,18 +1012,12 @@
       statusLine.textContent = text;
     }
 
-    function resetCurrentLevel(message = '') {
-      const index = currentLevelIndex;
-      loadLevel(index);
-      if (message) setStatus(message, 'bad');
-    }
-
     function renderLevelButtons() {
       const unlocked = loadProgress();
       levelList.innerHTML = levels.map((lvl, i) => `
         <button class="level-btn ${i === currentLevelIndex ? 'active' : ''}" data-level="${i}">
           ${i + 1}. ${lvl.name}
-          <small>${WORLD_NAMES[lvl.world || 'main']} · ${i < unlocked ? 'Unlocked' : 'Locked'} · ${lvl.goal}</small>
+          <small>${i < unlocked ? 'Unlocked' : 'Locked'} · ${lvl.goal}</small>
         </button>
       `).join('');
 
@@ -1188,38 +1032,47 @@
 
     function fitBoardToViewport() {
       if (!state) return;
-      const { w, h } = state.size;
+
+      const { w, h } = state.level.size;
       const wrap = board.parentElement;
-      const gap = window.innerWidth <= 620 ? 3 : 4;
-      const padding = window.innerWidth <= 620 ? 20 : 24;
+
+      const gap = window.innerWidth <= 620 ? 4 : 6;
+      const padding = window.innerWidth <= 620 ? 20 : 28;
       const availableWidth = Math.max(240, wrap.clientWidth || wrap.getBoundingClientRect().width || 0);
       const topOffset = wrap.getBoundingClientRect().top;
       const reservedBottom = window.innerWidth <= 620 ? 140 : 210;
       const availableHeight = Math.max(220, window.innerHeight - topOffset - reservedBottom);
+
       const widthBased = Math.floor((availableWidth - padding - gap * (w - 1)) / w);
       const heightBased = Math.floor((availableHeight - padding - gap * (h - 1)) / h);
+
       const maxDim = Math.max(w, h);
       const minCell = maxDim >= 14 ? 14 : maxDim >= 12 ? 16 : maxDim >= 10 ? 20 : 26;
+
       const cell = Math.max(minCell, Math.min(80, widthBased, heightBased));
       board.style.setProperty('--cell', `${cell}px`);
+    }
+
+    function applyWorldTheme(world) {
+      document.body.classList.remove('world-main', 'world-ice', 'world-volcano', 'world-factory');
+      document.body.classList.add(`world-${world || 'main'}`);
     }
 
     function loadLevel(index) {
       currentLevelIndex = index;
       state = cloneLevel(levels[index]);
       state.unlockedLevel = loadProgress();
-      applyWorldTheme(state.world);
       renderLevelButtons();
       updateHud();
       fitBoardToViewport();
       draw();
+      applyWorldTheme(state.world);
       setStatus(`Level loaded: ${state.level.name}. ${state.level.hint}`);
     }
 
     function draw() {
-      refreshHazards();
       board.innerHTML = '';
-      const { w, h } = state.size;
+      const { w, h } = state.level.size;
       board.style.gridTemplateColumns = `repeat(${w}, var(--cell))`;
       board.style.gridTemplateRows = `repeat(${h}, var(--cell))`;
 
@@ -1228,29 +1081,35 @@
           const tile = document.createElement('div');
           tile.className = 'tile floor pop-in';
           tile.setAttribute('role', 'gridcell');
-          const k = keyOf(x, y);
-          const base = getTile(x, y);
 
+          const base = getTile(x, y);
           if (base === '#') tile.classList.add('wall');
           if (base === 'E') tile.classList.add('exit');
           if (base === 'S') tile.classList.add('switch');
           if (base === 'K') tile.classList.add('key');
-          if (base === 'D') tile.classList.add(isSwitchActive() ? 'door-open' : 'door-closed');
-          if (base === 'L') tile.classList.add(state.hasKey ? 'door-open' : 'door-closed');
+          if (base === 'D') {
+            if (isSwitchActive()) tile.classList.add('door-open');
+            else tile.classList.add('door-closed');
+          }
+
+          if (base === 'L') {
+            if (state.hasKey) tile.classList.add('door-open');
+            else tile.classList.add('door-closed');
+          }
           if (base === 'O') tile.classList.add('portal-a');
           if (base === 'o') tile.classList.add('portal-b');
           if (base === 'I') tile.classList.add('ice');
           if (base === '~') tile.classList.add('lava');
           if (base === 'T') tile.classList.add('turret');
-          if (base === '^') tile.classList.add('laser-emitter', 'laser-up');
-          if (base === 'v') tile.classList.add('laser-emitter', 'laser-down');
-          if (base === '<') tile.classList.add('laser-emitter', 'laser-left');
-          if (base === '>') tile.classList.add('laser-emitter', 'laser-right');
-          if (state.hazards.beams.has(k)) tile.classList.add('laser-beam', 'factory-beam');
+          if (base === '^') tile.classList.add('laser-emitter');
+          if (base === 'v') tile.classList.add('laser-emitter');
+          if (base === '<') tile.classList.add('laser-emitter');
+          if (base === '>') tile.classList.add('laser-emitter');
 
           if (starAt(x, y)) tile.classList.add('star');
           if (boxAt(x, y)) tile.classList.add('box');
           if (state.player.x === x && state.player.y === y) tile.classList.add('has-player');
+          if (state.hazards.beams.has(`${x},${y}`)) tile.classList.add('laser-beam');
 
           const overlay = document.createElement('div');
           overlay.className = 'overlay';
@@ -1273,13 +1132,81 @@
       });
     }
 
-    function pickUpKey() {
-      if (getTile(state.player.x, state.player.y) === 'K') {
-        state.hasKey = true;
-        setTile(state.player.x, state.player.y, '.');
-        beep('move');
-        setStatus('You picked up the key.', 'good');
+    function move(dx, dy) {
+      if (state.finished) return;
+      const nx = state.player.x + dx;
+      const ny = state.player.y + dy;
+      const target = getTile(nx, ny);
+      const box = boxAt(nx, ny);
+
+      if (target === '#') {
+        beep('fail');
+        setStatus('A wall is in the way.', 'bad');
+        return;
       }
+
+      if (handleHazards()) {
+        draw();
+        return;
+      }
+
+      if (target === 'D' && !isSwitchActive()) {
+        beep('fail');
+        setStatus('The door is still closed. Put a box on the switch.', 'bad');
+        return;
+      }
+
+      if (target === 'L' && !state.hasKey) {
+        beep('fail');
+        setStatus('You need the key first.', 'bad');
+        return;
+      }
+
+      if (box) {
+        const bx = nx + dx;
+        const by = ny + dy;
+        const beyond = getTile(bx, by);
+        if (!tilePassable(bx, by, true) || boxAt(bx, by)) {
+          beep('fail');
+          setStatus('The box cannot move there.', 'bad');
+          return;
+        }
+        if (beyond === 'D' && !isSwitchActive()) {
+          beep('fail');
+          setStatus('The box cannot push through a closed door.', 'bad');
+          return;
+        }
+        if (beyond === 'L' && !state.hasKey) {
+          beep('fail');
+          setStatus('The locked door needs the key first.', 'bad');
+          return;
+        }
+
+        box.x = bx;
+        box.y = by;
+      }
+
+      let step = tryStep(dx, dy, true);
+      if (!step.moved || step.reset) {
+        draw();
+        return;
+      }
+
+      while (isIce(state.player.x, state.player.y)) {
+        const next = tryStep(dx, dy, false);
+        if (!next.moved || next.reset) break;
+      }
+
+      state.player.x = nx;
+      state.player.y = ny;
+      state.moves += 1;
+      beep('move');
+
+      collectStarAtPlayer();
+      pickUpKey();
+      handlePortals();
+      draw();
+      checkWin();
     }
 
     function collectStarAtPlayer() {
@@ -1290,6 +1217,75 @@
         beep('move');
         setStatus('Sparkle collected ✦', 'good');
       }
+    }
+
+    function pickUpKey() {
+      if (getTile(state.player.x, state.player.y) === 'K') {
+        state.hasKey = true;
+        setTile(state.player.x, state.player.y, '.');
+        beep('move');
+        setStatus('You picked up the key.', 'good');
+      }
+    }
+
+    function computeHazards() {
+      const danger = new Set();
+      const beams = new Set();
+
+      const castRay = (sx, sy, dx, dy) => {
+        let x = sx + dx;
+        let y = sy + dy;
+
+        while (inBounds(x, y)) {
+          const t = getTile(x, y);
+          if (t === '#' || (t === 'D' && !isSwitchActive()) || (t === 'L' && !state.hasKey) || boxAt(x, y)) break;
+          danger.add(`${x},${y}`);
+          beams.add(`${x},${y}`);
+          x += dx;
+          y += dy;
+        }
+      };
+
+      for (let y = 0; y < state.grid.length; y++) {
+        for (let x = 0; x < state.grid[y].length; x++) {
+          const cell = state.grid[y][x];
+
+          if (cell === 'T') {
+            danger.add(`${x},${y}`);
+            castRay(x, y, 1, 0);
+            castRay(x, y, -1, 0);
+            castRay(x, y, 0, 1);
+            castRay(x, y, 0, -1);
+          }
+
+          if (cell === '^') { danger.add(`${x},${y}`); castRay(x, y, 0, -1); }
+          if (cell === 'v') { danger.add(`${x},${y}`); castRay(x, y, 0, 1); }
+          if (cell === '<') { danger.add(`${x},${y}`); castRay(x, y, -1, 0); }
+          if (cell === '>') { danger.add(`${x},${y}`); castRay(x, y, 1, 0); }
+
+          if (cell === '~') {
+            danger.add(`${x},${y}`);
+          }
+        }
+      }
+
+      return { danger, beams };
+    }
+
+    function refreshHazards() {
+      state.hazards = computeHazards();
+    }
+
+    function handleHazards() {
+      refreshHazards();
+
+      const here = `${state.player.x},${state.player.y}`;
+      if (state.hazards.danger.has(here)) {
+        resetCurrentLevel('Hazard hit you. Level reset.');
+        return true;
+      }
+
+      return false;
     }
 
     function handlePortals() {
@@ -1312,98 +1308,6 @@
           beep('move');
         }
       }
-    }
-
-    function handleHazards() {
-      refreshHazards();
-      if (state.hazards.danger.has(keyOf(state.player.x, state.player.y))) {
-        const world = state.world || 'main';
-        const message = world === 'volcano'
-          ? 'You touched the lava. Level reset.'
-          : world === 'factory'
-            ? 'A factory hazard hit you. Level reset.'
-            : 'A hazard hit you. Level reset.';
-        beep('fail');
-        resetCurrentLevel(message);
-        return true;
-      }
-      return false;
-    }
-
-    function tryStep(dx, dy, countMove = false) {
-      const nx = state.player.x + dx;
-      const ny = state.player.y + dy;
-      const target = getTile(nx, ny);
-      const box = boxAt(nx, ny);
-
-      if (target === '#') {
-        beep('fail');
-        setStatus('A wall is in the way.', 'bad');
-        return { moved: false, reset: false };
-      }
-
-      if (target === 'D' && !isSwitchActive()) {
-        beep('fail');
-        setStatus('The door is still closed. Put a box on the switch.', 'bad');
-        return { moved: false, reset: false };
-      }
-
-      if (target === 'L' && !state.hasKey) {
-        beep('fail');
-        setStatus('You need the key first.', 'bad');
-        return { moved: false, reset: false };
-      }
-
-      if (box) {
-        const bx = nx + dx;
-        const by = ny + dy;
-        const beyond = getTile(bx, by);
-        if (!inBounds(bx, by) || boxAt(bx, by) || beyond === '#') {
-          beep('fail');
-          setStatus('The box cannot move there.', 'bad');
-          return { moved: false, reset: false };
-        }
-        if (beyond === 'D' && !isSwitchActive()) {
-          beep('fail');
-          setStatus('The box cannot push through a closed door.', 'bad');
-          return { moved: false, reset: false };
-        }
-        if (beyond === 'L' && !state.hasKey) {
-          beep('fail');
-          setStatus('The locked door needs the key first.', 'bad');
-          return { moved: false, reset: false };
-        }
-        box.x = bx;
-        box.y = by;
-      }
-
-      state.player.x = nx;
-      state.player.y = ny;
-      if (countMove) state.moves += 1;
-      beep('move');
-
-      collectStarAtPlayer();
-      pickUpKey();
-      handlePortals();
-      if (handleHazards()) return { moved: true, reset: true };
-      return { moved: true, reset: false };
-    }
-
-    function move(dx, dy) {
-      if (state.finished) return;
-      const first = tryStep(dx, dy, true);
-      if (!first.moved || first.reset) { draw(); return; }
-
-      let guard = 0;
-      while (getTile(state.player.x, state.player.y) === 'I' && guard < 40) {
-        const step = tryStep(dx, dy, false);
-        if (!step.moved || step.reset) return;
-        guard += 1;
-        if (getTile(state.player.x, state.player.y) !== 'I') break;
-      }
-
-      draw();
-      checkWin();
     }
 
     function checkWin() {
@@ -1476,7 +1380,7 @@
       if (key === 't') {
         applyTheme(document.body.classList.contains('dark') ? 'light' : 'dark');
       }
-      if (key >= '1' && key <= '8') {
+      if (key >= '1' && key <= '5') {
         const idx = Number(key) - 1;
         if (idx < loadProgress()) loadLevel(idx);
       }
