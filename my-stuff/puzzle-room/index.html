@@ -1368,8 +1368,20 @@
       refreshHazards();
 
       const here = `${state.player.x},${state.player.y}`;
-      if (state.hazards.danger.has(here)) {
-        resetCurrentLevel('Hazard hit you. Level reset.');
+      const tile = getTile(state.player.x, state.player.y);
+
+      const onDanger =
+        tile === '~' ||
+        state.hazards.danger.has(here) ||
+        state.hazards.beams.has(here);
+
+      if (onDanger) {
+        const message =
+          tile === '~'
+            ? 'You touched the lava. Level reset.'
+            : 'Hazard hit you. Level reset.';
+
+        resetCurrentLevel(message);
         return true;
       }
 
