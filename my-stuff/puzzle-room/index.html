@@ -1132,6 +1132,11 @@
       });
     }
 
+    function inBounds(x, y) {
+      return y >= 0 && y < state.grid.length &&
+            x >= 0 && x < state.grid[y].length;
+    }
+
     function move(dx, dy) {
       if (state.finished) return;
 
@@ -1241,7 +1246,7 @@
         let x = sx + dx;
         let y = sy + dy;
 
-        while (tilePassable(x, y)) {
+        while (inBounds(x, y)) {
           const t = getTile(x, y);
           if (t === '#' || (t === 'D' && !isSwitchActive()) || (t === 'L' && !state.hasKey) || boxAt(x, y)) break;
           danger.add(`${x},${y}`);
